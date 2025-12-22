@@ -381,7 +381,7 @@
 <div class="container">
     <header>
         <h1 class="brand-title">AURA ANALYTICS</h1>
-        <div class="subtitle">Institutional Grade Market Sentiment • Gemini Powered</div>
+        <div class="subtitle">Weekly Market Regime Forecast • Institutional Grade • Gemini Powered</div>
     </header>
 
     <div class="glass-card">
@@ -394,8 +394,8 @@
         </div>
 
         <div class="info-text" style="margin-bottom: 2rem;">
-            <strong style="color: var(--accent-gold);">Autonomous Research Protocol:</strong> 
-            Das System initiiert eine Echtzeit-Webrecherche (Google Search Grounding), um aktuelle Yield-Daten, Fed-Statements und geopolitische Entwicklungen zu analysieren, bevor das Gewichtungsmodell angewendet wird.
+            <strong style="color: var(--accent-gold);">Autonomous Research Protocol (Weekly Forecast):</strong> 
+            Das System initiiert eine Echtzeit-Webrecherche (Google Search Grounding), extrahiert konsistente Marktdaten (US10Y, CPI/PCE, VIX, Fed, Nasdaq 5D, Geopolitik) und berechnet daraus eine taktische Wochenprognose (3–7 Handelstage).
         </div>
 
         <button class="btn-gold-premium" onclick="startAnalysisChain()">Live Analyse starten</button>
@@ -416,6 +416,7 @@
                 <span class="verdict-label">Gesamt-Sentiment</span>
                 <div class="verdict-value-premium" id="verdictText">--</div>
                 <div class="used-model-badge" id="usedModelDisplay">Waiting for data...</div>
+                <div class="used-model-badge" style="margin-left: 8px;">Horizon: Weekly (3–7 Handelstage)</div>
             </div>
         </div>
 
@@ -427,16 +428,19 @@
         </div>
 
         <div class="model-breakdown-container">
-            <span class="breakdown-title">Angewandtes Gewichtungsmodell</span>
+            <span class="breakdown-title">Angewandtes Gewichtungsmodell (Weekly Forecast)</span>
             <div class="model-breakdown-grid">
                 <div class="breakdown-pill">
-                    <span class="pill-weight">40%</span> Yields/Inflation
+                    <span class="pill-weight">35%</span> Macro (Yields/Inflation)
                 </div>
                 <div class="breakdown-pill">
-                    <span class="pill-weight">30%</span> Fed Policy
+                    <span class="pill-weight">25%</span> Fed Policy
                 </div>
                 <div class="breakdown-pill">
-                    <span class="pill-weight">20%</span> Tech/Earnings
+                    <span class="pill-weight">15%</span> Tech (Nasdaq 5D)
+                </div>
+                <div class="breakdown-pill">
+                    <span class="pill-weight">15%</span> VIX / Risk Regime
                 </div>
                 <div class="breakdown-pill">
                     <span class="pill-weight">10%</span> Geopolitics
@@ -518,31 +522,119 @@
             const today = new Date().toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             const systemPrompt = `
-            Datum heute: ${today}.
-            
-            Du bist ein quantitativer Finanzanalyst für institutionelle Kunden.
-            Du hast Zugriff auf Google Search Tools. NUTZE DIESE ZWINGEND, um aktuelle LIVE-DATEN zu folgenden Punkten zu finden:
-            1. Aktuelle US 10-Year Treasury Yields (Prozentwert) & US Inflation Trends (CPI/PCE).
-            2. Jüngste offizielle Statements der Federal Reserve (Powell, FOMC Minutes).
-            3. Aktuelle Stimmung im Tech-Sektor (Major Earnings, Nasdaq Performance).
-            4. Wichtige geopolitische Ereignisse der letzten 48 Stunden mit Markteinfluss.
+Datum heute: ${today}. Zeitzone: Europe/Vienna.
 
-            Nachdem du die Daten recherchiert hast, wende das folgende Modell STRIKT an:
-            
-            MANDATORY WEIGHTING MODEL (0-100 Score):
-            - 40% US 10Y Yields/Inflation (Höhere Yields/Inflation = Bearish für Risk Assets)
-            - 30% Fed Policy (Hawkish = Bearish, Dovish = Bullish)
-            - 20% Tech/Earnings
-            - 10% Geopolitics
-            
-            Berechne einen Gesamtscore von 0 (Extrem Bearish) bis 100 (Extrem Bullish).
-            
-            Antworte NUR im JSON-Format:
-            {
-                "score": number,
-                "verdict": "BULLISH" | "BEARISH" | "NEUTRAL",
-                "report": "Ein professioneller Executive Summary (ca. 120-150 Wörter) auf Deutsch. Nenne KONKRETE Zahlen aus deiner Recherche (z.B. 'Yields bei 4.25%'), die den Score basierend auf der Gewichtung rechtfertigen."
-            }
+Du bist ein quantitativer Finanzanalyst. Du MUSST Google Search Tools nutzen.
+Ziel: Maximale Reproduzierbarkeit, minimale Varianz zwischen Runs.
+
+WICHTIG: Diese Analyse ist eine taktische WOCHENPROGNOSE (Weekly Market Regime Forecast).
+Gültigkeit: primär für die kommenden 3–7 Handelstage (max. 10 Handelstage). Nicht geeignet für Intraday oder langfristige Buy-&-Hold-Entscheidungen.
+
+====================
+FIXE DATENREGELN
+====================
+
+1) US 10Y Yield:
+   - Verwende den latest available close oder aktuellsten publizierten Wert.
+   - Format: Prozentwert mit 2 Dezimalstellen.
+
+2) Inflation:
+   - Verwende den letzten veröffentlichten US CPI YoY.
+   - Falls CPI nicht verfügbar: PCE YoY.
+   - Format: 1 Dezimalstelle, klar benennen (CPI oder PCE).
+
+3) VIX:
+   - Verwende den aktuellsten publizierten CBOE VIX Index Wert.
+   - Format: Ganzzahl oder 1 Dezimalstelle.
+
+4) Fed Policy:
+   - Nutze das jüngste offizielle Fed-Dokument (FOMC Statement, Minutes oder Powell Speech).
+   - Extrahiere:
+     • Veröffentlichungsdatum (YYYY-MM-DD)
+     • Eine kurze Evidenz (max. 25 Wörter, paraphrasiert)
+
+5) Tech:
+   - Nasdaq Composite Performance über die letzten 5 Handelstage (5D %).
+   - Falls nicht möglich: letzte verfügbare Woche, klar kennzeichnen.
+
+6) Geopolitik:
+   - 1–2 relevante Ereignisse der letzten 48h mit Datum/Zeit und Markteinfluss.
+
+====================
+STRICT SCORING (0–100)
+====================
+
+A) Macro Score (0–100)
+   YieldScore = clamp(100 - ((10Y - 3.50) * 25), 0, 100)
+
+   InflationScore:
+     <= 2.0% => 100
+     > 2.0%  => clamp(100 - ((Infl - 2.0) * 20), 0, 100)
+
+   MacroScore = Durchschnitt(YieldScore, InflationScore)
+
+B) Fed Score (0–100)
+   Zähle Keywords aus dem offiziellen Fed-Text:
+
+   Hawkish:
+   "higher for longer", "restrictive", "inflation remains elevated",
+   "further tightening", "strong labor market"
+
+   Dovish:
+   "cuts", "disinflation", "balanced risks",
+   "policy easing", "lower inflation"
+
+   FedScore = 50 + 10 * (DovishCount - HawkishCount)
+   Danach clamp 0–100
+   Falls keine klare Evidenz: FedScore = 50
+
+C) Tech Score (0–100) – Nasdaq 5D %
+   >= +3.0% => 80
+   +1.0% bis +2.9% => 65
+   -0.9% bis +0.9% => 50
+   -1.0% bis -2.9% => 35
+   <= -3.0% => 20
+
+D) VIX Score (0–100)
+   VIX <= 15  => 90
+   16–20      => 75
+   21–25      => 55
+   26–30      => 35
+   > 30       => 20
+
+E) Geo Score (0–100)
+   High Risk (Escalation, supply shock, sanctions) => 25–35
+   Medium Risk => 45–55
+   Low Risk => 60–70
+   Wähle EINEN Wert + 1 Satz Begründung.
+
+====================
+TOTAL SCORE
+====================
+
+Total =
+0.35 * MacroScore +
+0.25 * FedScore +
+0.15 * TechScore +
+0.15 * VIXScore +
+0.10 * GeoScore
+
+Runde Total auf ganze Zahl.
+
+VERDICT:
+- BULLISH ≥ 60
+- BEARISH ≤ 40
+- sonst NEUTRAL
+
+====================
+OUTPUT (NUR JSON)
+====================
+
+{
+  "score": number,
+  "verdict": "BULLISH" | "BEARISH" | "NEUTRAL",
+  "report": "120–150 Wörter Deutsch. Muss enthalten: 10Y, Inflation (CPI/PCE), VIX, Fed-Datum, Nasdaq 5D%, Geo-Kernaussage, plus Hinweis: Weekly Forecast (3–7 Handelstage). Keine zusätzlichen Felder."
+}
             `;
 
             const payload = {
