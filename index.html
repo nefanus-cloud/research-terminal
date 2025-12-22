@@ -14,7 +14,7 @@
     <style>
         /* --- PROFESSIONAL HQ THEME VARIABLES --- */
         :root {
-            --bg-main: #020617; /* Deeper, darker blue-black */
+            --bg-main: #020617;
             --bg-secondary: #0f172a;
             
             /* Glassmorphism Variables */
@@ -26,7 +26,7 @@
             --text-bright: #ffffff;
             --text-muted: #94a3b8;
             
-            /* Refined Gold Palette (Champagne Gold) */
+            /* Refined Gold Palette */
             --accent-gold: #C0A062; 
             --accent-gold-light: #EAD2A8;
             --accent-gold-glow: rgba(192, 160, 98, 0.4);
@@ -45,7 +45,6 @@
         /* --- GLOBAL RESET & BASE --- */
         body {
             background-color: var(--bg-main);
-            /* Complex, subtle gradient background for depth */
             background: radial-gradient(circle at top right, #1e293b 0%, transparent 45%),
                         radial-gradient(circle at bottom left, #172554 0%, transparent 45%),
                         var(--bg-main);
@@ -55,23 +54,37 @@
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column; 
+            align-items: center;
             min-height: 100vh;
             font-weight: 300;
             -webkit-font-smoothing: antialiased;
         }
 
+        /* --- TRADINGVIEW CONTAINER (Sticky Top) --- */
+        .tv-ticker-wrapper {
+            width: 100%;
+            height: 48px; /* Fixed height for ticker */
+            position: sticky; 
+            top: 0;
+            z-index: 1000;
+            /* Semi-transparent background for readability while scrolling */
+            background: rgba(2, 6, 23, 0.85); 
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+        }
+
         .container {
             width: 100%;
-            max-width: 900px; /* Slightly wider for professional look */
-            padding: 3rem 2rem;
+            max-width: 900px;
+            padding: 4rem 2rem 2rem 2rem; 
+            box-sizing: border-box;
         }
 
         /* --- TYPOGRAPHY --- */
         header {
             text-align: center;
-            margin-bottom: 4rem;
-            position: relative;
+            margin-bottom: 3rem;
         }
 
         h1.brand-title {
@@ -80,7 +93,6 @@
             font-weight: 700;
             margin: 0;
             letter-spacing: -1px;
-            /* Gradient Text Fill for premium look */
             background: linear-gradient(to right, var(--accent-gold-light), var(--accent-gold));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -99,27 +111,23 @@
         /* --- GLASS CARDS --- */
         .glass-card {
             background: var(--card-glass-bg);
-            /* The core Glassmorphism effect: */
             backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur); /* Safari support */
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--card-border);
-            
             border-radius: 16px;
             padding: 2.5rem;
-            /* Deep, soft shadow */
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             margin-bottom: 2.5rem;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Optional: subtle hover lift effect */
-        /* .glass-card:hover { transform: translateY(-2px); box-shadow: 0 30px 60px -12px rgba(0,0,0,0.6); } */
-
         /* --- FORMS & INPUTS --- */
         .input-group { margin-bottom: 2rem; }
 
         label.premium-label {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 0.8rem;
             color: var(--accent-gold);
             font-size: 0.85rem;
@@ -128,9 +136,21 @@
             text-transform: uppercase;
         }
 
+        .clear-key-link {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-decoration: underline;
+            cursor: pointer;
+            text-transform: none;
+            letter-spacing: 0;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .clear-key-link:hover { opacity: 1; color: var(--danger); }
+
         input[type="password"] {
             width: 100%;
-            background: rgba(255, 255, 255, 0.03); /* Very subtle background */
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-bright);
             padding: 16px;
@@ -144,7 +164,7 @@
         input:focus {
             outline: none;
             border-color: var(--accent-gold);
-            box-shadow: 0 0 20px var(--accent-gold-glow); /* Glowing focus state */
+            box-shadow: 0 0 20px var(--accent-gold-glow);
             background: rgba(255, 255, 255, 0.05);
         }
 
@@ -152,7 +172,7 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             line-height: 1.6;
-            background: rgba(192, 160, 98, 0.05); /* Subtle gold tint bg */
+            background: rgba(192, 160, 98, 0.05);
             padding: 1rem;
             border-radius: 8px;
             border-left: 3px solid var(--accent-gold);
@@ -161,7 +181,7 @@
         /* --- BUTTONS --- */
         .btn-gold-premium {
             background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
-            color: #0a0a0a; /* Dark text on gold */
+            color: #0a0a0a;
             border: none;
             padding: 16px 32px;
             border-radius: 8px;
@@ -232,7 +252,6 @@
             width: 140px;
             height: 140px;
             border-radius: 50%;
-            /* Glowing border effect */
             border: 3px solid rgba(255,255,255,0.05);
             box-shadow: 0 0 40px var(--accent-gold-glow), inset 0 0 20px rgba(192, 160, 98, 0.1);
             display: flex;
@@ -267,7 +286,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Verdict Colors with Glow */
+        /* Verdict Colors */
         .v-bullish { color: var(--success); text-shadow: 0 0 30px var(--success-glow); }
         .v-bearish { color: var(--danger); text-shadow: 0 0 30px var(--danger-glow); }
         .v-neutral { color: var(--neutral); }
@@ -335,6 +354,30 @@
 </head>
 <body>
 
+    <div class="tv-ticker-wrapper">
+        <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            {
+            "symbols": [
+                { "proName": "NASDAQ:NVDA", "title": "NVIDIA" },
+                { "proName": "NASDAQ:MSFT", "title": "Microsoft" },
+                { "proName": "NASDAQ:AAPL", "title": "Apple" },
+                { "proName": "NASDAQ:GOOGL", "title": "Alphabet" },
+                { "proName": "NASDAQ:AMZN", "title": "Amazon" },
+                { "proName": "NASDAQ:META", "title": "Meta" },
+                { "proName": "NASDAQ:TSLA", "title": "Tesla" }
+            ],
+            "showSymbolLogo": true,
+            "colorTheme": "dark",
+            "isTransparent": true,
+            "displayMode": "adaptive",
+            "locale": "de_DE"
+            }
+            </script>
+        </div>
+    </div>
+
 <div class="container">
     <header>
         <h1 class="brand-title">AURA ANALYTICS</h1>
@@ -343,8 +386,11 @@
 
     <div class="glass-card">
         <div class="input-group">
-            <label for="apiKey" class="premium-label">Gemini API Access Key</label>
-            <input type="password" id="apiKey" placeholder="Ihr API Key (wird sitzungsbasiert verwendet)">
+            <label for="apiKey" class="premium-label">
+                Gemini API Access Key
+                <span class="clear-key-link" onclick="clearKey()" title="Key aus dem lokalen Speicher entfernen">Key löschen</span>
+            </label>
+            <input type="password" id="apiKey" placeholder="Ihr API Key (wird sicher lokal gespeichert)">
         </div>
 
         <div class="info-text" style="margin-bottom: 2rem;">
@@ -401,16 +447,33 @@
 </div>
 
 <script>
-    // --- SAME LOGIC AS BEFORE, JUST UPDATED CLASS NAMES FOR RENDERING ---
-
     const MODEL_PRIORITY = [    
         "gemini-3-pro-preview", 
         "gemini-3-flash-preview",
         "gemini-2.5-flash"
     ];
 
+    const STORAGE_KEY = 'aura_gemini_key';
+
+    // --- LOCAL STORAGE LOGIC ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedKey = localStorage.getItem(STORAGE_KEY);
+        if (savedKey) {
+            document.getElementById('apiKey').value = savedKey;
+        }
+    });
+
+    function clearKey() {
+        if(confirm('Möchten Sie den gespeicherten API Key wirklich löschen?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            document.getElementById('apiKey').value = '';
+            alert("API Key wurde entfernt.");
+        }
+    }
+
     async function startAnalysisChain() {
-        const apiKey = document.getElementById('apiKey').value.trim();
+        const apiKeyInput = document.getElementById('apiKey');
+        const apiKey = apiKeyInput.value.trim();
         const loadingDiv = document.getElementById('loading');
         const resultDiv = document.getElementById('result-section');
         const btn = document.querySelector('.btn-gold-premium');
@@ -421,9 +484,12 @@
             return;
         }
 
+        // SAVE KEY TO LOCAL STORAGE
+        localStorage.setItem(STORAGE_KEY, apiKey);
+
         // UI Reset
         btn.disabled = true;
-        btn.innerHTML = "Analysiere..."; // Feedback on button text
+        btn.innerHTML = "Analysiere..."; 
         loadingDiv.style.display = 'block';
         resultDiv.style.display = 'none';
         retryText.textContent = "";
@@ -432,7 +498,7 @@
         await tryModel(0, apiKey);
 
         btn.disabled = false;
-        btn.innerHTML = "Live Analyse starten"; // Reset button text
+        btn.innerHTML = "Live Analyse starten"; 
         loadingDiv.style.display = 'none';
     }
 
@@ -451,7 +517,6 @@
         try {
             const today = new Date().toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-            // SYSTEM PROMPT (Unchanged)
             const systemPrompt = `
             Datum heute: ${today}.
             
@@ -523,37 +588,4 @@
         scoreVal.textContent = data.score;
         verdictTxt.textContent = data.verdict;
         reportTxt.textContent = data.report;
-        usedModelTxt.textContent = `Data Source: Google Search via ${modelName}`;
-
-        // Reset classes and styles
-        verdictTxt.className = 'verdict-value-premium'; 
-        scoreVal.style.borderColor = 'rgba(255,255,255,0.05)';
-        scoreVal.style.boxShadow = 'inset 0 0 20px rgba(192, 160, 98, 0.1)';
-        scoreVal.style.color = 'var(--accent-gold-light)';
-
-        // Apply Premium Color Logic with Glows
-        if (data.verdict.toUpperCase().includes('BULL')) {
-            verdictTxt.classList.add('v-bullish');
-            scoreVal.style.borderColor = 'var(--success)';
-            scoreVal.style.boxShadow = '0 0 40px var(--success-glow), inset 0 0 20px rgba(16, 185, 129, 0.2)';
-            scoreVal.style.color = 'var(--success)';
-        } else if (data.verdict.toUpperCase().includes('BEAR')) {
-            verdictTxt.classList.add('v-bearish');
-            scoreVal.style.borderColor = 'var(--danger)';
-            scoreVal.style.boxShadow = '0 0 40px var(--danger-glow), inset 0 0 20px rgba(239, 68, 68, 0.2)';
-            scoreVal.style.color = 'var(--danger)';
-        } else {
-            verdictTxt.classList.add('v-neutral');
-             scoreVal.style.borderColor = 'var(--neutral)';
-             scoreVal.style.boxShadow = '0 0 40px rgba(245, 158, 11, 0.4)';
-             scoreVal.style.color = 'var(--neutral)';
-        }
-
-        resultSection.style.display = 'block';
-        // Scroll to results smoothly
-        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-</script>
-
-</body>
-</html>
+        usedModel
