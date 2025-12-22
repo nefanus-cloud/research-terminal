@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURA | Quantitative Market Sentinel</title>
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23EAD2A8'/%3E%3Cstop offset='100%25' style='stop-color:%23C0A062'/%3E%3C/linearGradient%3E%3Cfilter id='f' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='2' result='b'/%3E%3CfeMerge%3E%3CfeMergeNode in='b'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='30' fill='%230f172a' stroke='url(%23g)' stroke-width='2'/%3E%3Cpath d='M32 14L50 50H14L32 14Z' fill='none' stroke='url(%23g)' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' filter='url(%23f)'/%3E%3C/svg%3E" type="image/svg+xml">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -401,12 +403,10 @@
 <script>
     // --- SAME LOGIC AS BEFORE, JUST UPDATED CLASS NAMES FOR RENDERING ---
 
-    const MODEL_PRIORITY = [
-        "gemini-2.0-flash-exp", 
-        "gemini-1.5-pro",       
-        "gemini-1.5-flash",     
+    const MODEL_PRIORITY = [    
         "gemini-3-pro-preview", 
-        "gemini-3-flash-preview"
+        "gemini-3-flash-preview",
+        "gemini-2.5-flash"
     ];
 
     async function startAnalysisChain() {
