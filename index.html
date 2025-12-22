@@ -588,4 +588,37 @@
         scoreVal.textContent = data.score;
         verdictTxt.textContent = data.verdict;
         reportTxt.textContent = data.report;
-        usedModel
+        usedModelTxt.textContent = `Data Source: Google Search via ${modelName}`;
+
+        // Reset classes and styles
+        verdictTxt.className = 'verdict-value-premium'; 
+        scoreVal.style.borderColor = 'rgba(255,255,255,0.05)';
+        scoreVal.style.boxShadow = 'inset 0 0 20px rgba(192, 160, 98, 0.1)';
+        scoreVal.style.color = 'var(--accent-gold-light)';
+
+        // Apply Premium Color Logic with Glows
+        if (data.verdict.toUpperCase().includes('BULL')) {
+            verdictTxt.classList.add('v-bullish');
+            scoreVal.style.borderColor = 'var(--success)';
+            scoreVal.style.boxShadow = '0 0 40px var(--success-glow), inset 0 0 20px rgba(16, 185, 129, 0.2)';
+            scoreVal.style.color = 'var(--success)';
+        } else if (data.verdict.toUpperCase().includes('BEAR')) {
+            verdictTxt.classList.add('v-bearish');
+            scoreVal.style.borderColor = 'var(--danger)';
+            scoreVal.style.boxShadow = '0 0 40px var(--danger-glow), inset 0 0 20px rgba(239, 68, 68, 0.2)';
+            scoreVal.style.color = 'var(--danger)';
+        } else {
+            verdictTxt.classList.add('v-neutral');
+             scoreVal.style.borderColor = 'var(--neutral)';
+             scoreVal.style.boxShadow = '0 0 40px rgba(245, 158, 11, 0.4)';
+             scoreVal.style.color = 'var(--neutral)';
+        }
+
+        resultSection.style.display = 'block';
+        // Scroll to results smoothly
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+</script>
+
+</body>
+</html>
