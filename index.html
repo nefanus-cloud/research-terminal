@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,26 +12,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- PROFESSIONAL HQ THEME VARIABLES --- */
         :root {
             --bg-main: #020617;
             --bg-secondary: #0f172a;
-            
-            /* Glassmorphism Variables */
+
             --card-glass-bg: rgba(15, 23, 42, 0.6);
             --card-border: rgba(255, 255, 255, 0.08);
             --glass-blur: blur(20px);
 
-            /* Text & Accents */
             --text-bright: #ffffff;
             --text-muted: #94a3b8;
-            
-            /* Refined Gold Palette */
-            --accent-gold: #C0A062; 
+
+            --accent-gold: #C0A062;
             --accent-gold-light: #EAD2A8;
             --accent-gold-glow: rgba(192, 160, 98, 0.4);
-            
-            /* Status Colors */
+
             --success: #10b981;
             --success-glow: rgba(16, 185, 129, 0.4);
             --danger: #ef4444;
@@ -42,7 +37,6 @@
             --font-sans: 'Inter', sans-serif;
         }
 
-        /* --- GLOBAL RESET & BASE --- */
         body {
             background-color: var(--bg-main);
             background: radial-gradient(circle at top right, #1e293b 0%, transparent 45%),
@@ -54,22 +48,20 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             font-weight: 300;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- TRADINGVIEW CONTAINER (Sticky Top) --- */
         .tv-ticker-wrapper {
             width: 100%;
-            height: 48px; /* Fixed height for ticker */
-            position: sticky; 
+            height: 48px;
+            position: sticky;
             top: 0;
             z-index: 1000;
-            /* Semi-transparent background for readability while scrolling */
-            background: rgba(2, 6, 23, 0.85); 
+            background: rgba(2, 6, 23, 0.85);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--card-border);
         }
@@ -77,11 +69,10 @@
         .container {
             width: 100%;
             max-width: 900px;
-            padding: 4rem 2rem 2rem 2rem; 
+            padding: 4rem 2rem 2rem 2rem;
             box-sizing: border-box;
         }
 
-        /* --- TYPOGRAPHY --- */
         header {
             text-align: center;
             margin-bottom: 3rem;
@@ -108,7 +99,6 @@
             font-weight: 500;
         }
 
-        /* --- GLASS CARDS --- */
         .glass-card {
             background: var(--card-glass-bg);
             backdrop-filter: var(--glass-blur);
@@ -121,7 +111,6 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* --- FORMS & INPUTS --- */
         .input-group { margin-bottom: 2rem; }
 
         label.premium-label {
@@ -178,7 +167,6 @@
             border-left: 3px solid var(--accent-gold);
         }
 
-        /* --- BUTTONS --- */
         .btn-gold-premium {
             background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
             color: #0a0a0a;
@@ -211,13 +199,12 @@
             transform: none;
         }
 
-        /* --- LOADING STATE --- */
         .loading-container {
             text-align: center;
             display: none;
             padding: 3rem;
         }
-        
+
         .premium-spinner {
             width: 60px;
             height: 60px;
@@ -228,12 +215,11 @@
             margin: 0 auto 1.5rem auto;
             box-shadow: 0 0 20px var(--accent-gold-glow);
         }
-        
+
         #loading-text { color: var(--accent-gold); font-weight: 500; font-size: 1.2rem; margin-bottom: 0.5rem; }
         #loading-subtext { color: var(--text-muted); }
         #retry-status { color: var(--text-muted); font-style: italic; margin-top: 1rem; min-height: 1.2em; }
 
-        /* --- RESULTS SECTION --- */
         #result-section {
             display: none;
             animation: slideUpFade 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -266,7 +252,7 @@
 
         .verdict-box { text-align: right; }
         .verdict-label { display: block; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem;}
-        
+
         .verdict-value-premium {
             font-size: 2.5rem;
             font-weight: 700;
@@ -286,7 +272,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Verdict Colors */
         .v-bullish { color: var(--success); text-shadow: 0 0 30px var(--success-glow); }
         .v-bearish { color: var(--danger); text-shadow: 0 0 30px var(--danger-glow); }
         .v-neutral { color: var(--neutral); }
@@ -306,7 +291,6 @@
             font-weight: 300;
         }
 
-        /* --- MODEL BREAKDOWN VISUALS --- */
         .model-breakdown-container {
             margin-top: 3rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -342,14 +326,12 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Responsive Adjustments */
         @media (max-width: 600px) {
             h1.brand-title { font-size: 2.5rem; }
             .score-header { flex-direction: column; text-align: center; }
             .verdict-box { text-align: center; margin-top: 2rem; }
             .glass-card { padding: 1.5rem; }
         }
-
     </style>
 </head>
 <body>
@@ -372,7 +354,7 @@
             "colorTheme": "dark",
             "isTransparent": true,
             "displayMode": "adaptive",
-            "locale": "de_DE"
+            "locale": "en"
             }
             </script>
         </div>
@@ -388,47 +370,47 @@
         <div class="input-group">
             <label for="apiKey" class="premium-label">
                 Gemini API Access Key
-                <span class="clear-key-link" onclick="clearKey()" title="Key aus dem lokalen Speicher entfernen">Key löschen</span>
+                <span class="clear-key-link" onclick="clearKey()" title="Remove key from local storage">Clear key</span>
             </label>
-            <input type="password" id="apiKey" placeholder="Ihr API Key (wird sicher lokal gespeichert)">
+            <input type="password" id="apiKey" placeholder="Your API key (stored securely on this device)">
         </div>
 
         <div class="info-text" style="margin-bottom: 2rem;">
-            <strong style="color: var(--accent-gold);">Autonomous Research Protocol (Weekly Forecast):</strong> 
-            Das System initiiert eine Echtzeit-Webrecherche (Google Search Grounding), extrahiert konsistente Marktdaten (US10Y, CPI/PCE, VIX, Fed, Nasdaq 5D, Geopolitik) und berechnet daraus eine taktische Wochenprognose (3–7 Handelstage).
+            <strong style="color: var(--accent-gold);">Autonomous Research Protocol (Weekly Forecast):</strong>
+            The system initiates real-time web research (Google Search Grounding), extracts consistent market inputs (US10Y, CPI/PCE, VIX, Fed, Nasdaq 5D, geopolitics), and computes a tactical weekly forecast (3–7 trading days).
         </div>
 
-        <button class="btn-gold-premium" onclick="startAnalysisChain()">Live Analyse starten</button>
+        <button class="btn-gold-premium" onclick="startAnalysisChain()">Start Live Analysis</button>
     </div>
 
     <div id="loading" class="loading-container">
         <div class="premium-spinner"></div>
-        <div id="loading-text">Initialisiere Analyse-Pipeline...</div>
-        <div id="loading-subtext">Durchsuche Live-Marktdaten...</div>
+        <div id="loading-text">Initializing analysis pipeline...</div>
+        <div id="loading-subtext">Scanning live market data...</div>
         <div id="retry-status"></div>
     </div>
 
     <div id="result-section" class="glass-card">
         <div class="score-header">
             <div class="score-circle-premium" id="scoreValue">--</div>
-            
+
             <div class="verdict-box">
-                <span class="verdict-label">Gesamt-Sentiment</span>
+                <span class="verdict-label">Overall Sentiment</span>
                 <div class="verdict-value-premium" id="verdictText">--</div>
                 <div class="used-model-badge" id="usedModelDisplay">Waiting for data...</div>
-                <div class="used-model-badge" style="margin-left: 8px;">Horizon: Weekly (3–7 Handelstage)</div>
+                <div class="used-model-badge" style="margin-left: 8px;">Horizon: Weekly (3–7 trading days)</div>
             </div>
         </div>
 
         <div class="report-content">
             <h3>Executive Summary & Research</h3>
             <p id="reportText" class="report-text-premium">
-                Die Analyse wird hier erscheinen, sobald die Daten verarbeitet wurden.
+                The analysis will appear here once the data has been processed.
             </p>
         </div>
 
         <div class="model-breakdown-container">
-            <span class="breakdown-title">Angewandtes Gewichtungsmodell (Weekly Forecast)</span>
+            <span class="breakdown-title">Applied Weighting Model (Weekly Forecast)</span>
             <div class="model-breakdown-grid">
                 <div class="breakdown-pill">
                     <span class="pill-weight">35%</span> Macro (Yields/Inflation)
@@ -451,15 +433,14 @@
 </div>
 
 <script>
-    const MODEL_PRIORITY = [    
-        "gemini-3-pro-preview", 
+    const MODEL_PRIORITY = [
+        "gemini-3-pro-preview",
         "gemini-3-flash-preview",
         "gemini-2.5-flash"
     ];
 
     const STORAGE_KEY = 'aura_gemini_key';
 
-    // --- LOCAL STORAGE LOGIC ---
     document.addEventListener('DOMContentLoaded', () => {
         const savedKey = localStorage.getItem(STORAGE_KEY);
         if (savedKey) {
@@ -468,10 +449,10 @@
     });
 
     function clearKey() {
-        if(confirm('Möchten Sie den gespeicherten API Key wirklich löschen?')) {
+        if(confirm('Do you really want to remove the stored API key?')) {
             localStorage.removeItem(STORAGE_KEY);
             document.getElementById('apiKey').value = '';
-            alert("API Key wurde entfernt.");
+            alert("API key removed.");
         }
     }
 
@@ -484,81 +465,78 @@
         const retryText = document.getElementById('retry-status');
 
         if (!apiKey) {
-            alert('Bitte geben Sie einen gültigen Gemini API Key ein.');
+            alert('Please enter a valid Gemini API key.');
             return;
         }
 
-        // SAVE KEY TO LOCAL STORAGE
         localStorage.setItem(STORAGE_KEY, apiKey);
 
-        // UI Reset
         btn.disabled = true;
-        btn.innerHTML = "Analysiere..."; 
+        btn.innerHTML = "Analyzing...";
         loadingDiv.style.display = 'block';
         resultDiv.style.display = 'none';
         retryText.textContent = "";
 
-        // Start recursion through models
         await tryModel(0, apiKey);
 
         btn.disabled = false;
-        btn.innerHTML = "Live Analyse starten"; 
+        btn.innerHTML = "Start Live Analysis";
         loadingDiv.style.display = 'none';
     }
 
     async function tryModel(index, apiKey) {
         const statusText = document.getElementById('loading-text');
         const retryText = document.getElementById('retry-status');
-        
+
         if (index >= MODEL_PRIORITY.length) {
-            alert("Kritischer Fehler: Alle verfügbaren Modelle konnten die Anfrage nicht verarbeiten. Bitte prüfen Sie den API Key auf Berechtigungen (Search Grounding).");
+            alert("Critical error: none of the available models could process the request. Please verify your API key permissions (Search Grounding).");
             return;
         }
 
         const currentModel = MODEL_PRIORITY[index];
-        statusText.textContent = `Verarbeite mit Modell: ${currentModel}...`;
-        
+        statusText.textContent = `Processing with model: ${currentModel}...`;
+
         try {
-            const today = new Date().toLocaleDateString('de-DE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             const systemPrompt = `
-Datum heute: ${today}. Zeitzone: Europe/Vienna.
+Date today: ${today}. Timezone: Europe/Vienna.
 
-Du bist ein quantitativer Finanzanalyst. Du MUSST Google Search Tools nutzen.
-Ziel: Maximale Reproduzierbarkeit, minimale Varianz zwischen Runs.
+You are a quantitative market analyst. You MUST use Google Search tools.
+Goal: maximum reproducibility, minimal variance between runs.
 
-WICHTIG: Diese Analyse ist eine taktische WOCHENPROGNOSE (Weekly Market Regime Forecast).
-Gültigkeit: primär für die kommenden 3–7 Handelstage (max. 10 Handelstage). Nicht geeignet für Intraday oder langfristige Buy-&-Hold-Entscheidungen.
+IMPORTANT: This analysis is a tactical WEEKLY forecast (Weekly Market Regime Forecast).
+Validity: primarily for the next 3–7 trading days (max. 10 trading days). Not suitable for intraday trading or long-term buy-and-hold decisions.
 
 ====================
-FIXE DATENREGELN
+FIXED DATA RULES
 ====================
 
 1) US 10Y Yield:
-   - Verwende den latest available close oder aktuellsten publizierten Wert.
-   - Format: Prozentwert mit 2 Dezimalstellen.
+   - Use the latest available close or the most recently published value.
+   - Format: percent with 2 decimals.
 
 2) Inflation:
-   - Verwende den letzten veröffentlichten US CPI YoY.
-   - Falls CPI nicht verfügbar: PCE YoY.
-   - Format: 1 Dezimalstelle, klar benennen (CPI oder PCE).
+   - Use the latest released US CPI YoY.
+   - If CPI is not available: PCE YoY.
+   - Format: 1 decimal, explicitly label CPI or PCE.
 
 3) VIX:
-   - Verwende den aktuellsten publizierten CBOE VIX Index Wert.
-   - Format: Ganzzahl oder 1 Dezimalstelle.
+   - Use the most recently published CBOE VIX Index value.
+   - Format: integer or 1 decimal.
 
 4) Fed Policy:
-   - Nutze das jüngste offizielle Fed-Dokument (FOMC Statement, Minutes oder Powell Speech).
-   - Extrahiere:
-     • Veröffentlichungsdatum (YYYY-MM-DD)
-     • Eine kurze Evidenz (max. 25 Wörter, paraphrasiert)
+   - Use the latest official Fed document (FOMC Statement, Minutes, or a Powell speech).
+   - Extract:
+     • release date (YYYY-MM-DD)
+     • one short evidence sentence (max 25 words, paraphrased)
 
 5) Tech:
-   - Nasdaq Composite Performance über die letzten 5 Handelstage (5D %).
-   - Falls nicht möglich: letzte verfügbare Woche, klar kennzeichnen.
+   - Nasdaq Composite performance over the last 5 trading days (5D %).
+   - If not possible: latest available weekly % and clearly label it.
 
-6) Geopolitik:
-   - 1–2 relevante Ereignisse der letzten 48h mit Datum/Zeit und Markteinfluss.
+6) Geopolitics:
+   - 1–2 relevant events from the last 48h with timestamp and market impact.
 
 ====================
 STRICT SCORING (0–100)
@@ -571,10 +549,10 @@ A) Macro Score (0–100)
      <= 2.0% => 100
      > 2.0%  => clamp(100 - ((Infl - 2.0) * 20), 0, 100)
 
-   MacroScore = Durchschnitt(YieldScore, InflationScore)
+   MacroScore = average(YieldScore, InflationScore)
 
 B) Fed Score (0–100)
-   Zähle Keywords aus dem offiziellen Fed-Text:
+   Count keywords from the official Fed text:
 
    Hawkish:
    "higher for longer", "restrictive", "inflation remains elevated",
@@ -585,14 +563,14 @@ B) Fed Score (0–100)
    "policy easing", "lower inflation"
 
    FedScore = 50 + 10 * (DovishCount - HawkishCount)
-   Danach clamp 0–100
-   Falls keine klare Evidenz: FedScore = 50
+   Then clamp 0–100
+   If evidence is unclear: FedScore = 50
 
 C) Tech Score (0–100) – Nasdaq 5D %
    >= +3.0% => 80
-   +1.0% bis +2.9% => 65
-   -0.9% bis +0.9% => 50
-   -1.0% bis -2.9% => 35
+   +1.0% to +2.9% => 65
+   -0.9% to +0.9% => 50
+   -1.0% to -2.9% => 35
    <= -3.0% => 20
 
 D) VIX Score (0–100)
@@ -603,10 +581,10 @@ D) VIX Score (0–100)
    > 30       => 20
 
 E) Geo Score (0–100)
-   High Risk (Escalation, supply shock, sanctions) => 25–35
-   Medium Risk => 45–55
-   Low Risk => 60–70
-   Wähle EINEN Wert + 1 Satz Begründung.
+   High risk (escalation, supply shock, sanctions) => 25–35
+   Medium risk => 45–55
+   Low risk => 60–70
+   Choose ONE value + 1 sentence justification.
 
 ====================
 TOTAL SCORE
@@ -619,27 +597,27 @@ Total =
 0.15 * VIXScore +
 0.10 * GeoScore
 
-Runde Total auf ganze Zahl.
+Round Total to a whole number.
 
 VERDICT:
-- BULLISH ≥ 60
-- BEARISH ≤ 40
-- sonst NEUTRAL
+- BULLISH if Total >= 60
+- BEARISH if Total <= 40
+- otherwise NEUTRAL
 
 ====================
-OUTPUT (NUR JSON)
+OUTPUT (JSON ONLY)
 ====================
 
 {
   "score": number,
   "verdict": "BULLISH" | "BEARISH" | "NEUTRAL",
-  "report": "120–150 Wörter Deutsch. Muss enthalten: 10Y, Inflation (CPI/PCE), VIX, Fed-Datum, Nasdaq 5D%, Geo-Kernaussage, plus Hinweis: Weekly Forecast (3–7 Handelstage). Keine zusätzlichen Felder."
+  "report": "120–150 words in English. Must include: 10Y, inflation (CPI/PCE), VIX, Fed date, Nasdaq 5D%, geo takeaway, plus: Weekly Forecast (3–7 trading days). No additional fields."
 }
             `;
 
             const payload = {
                 contents: [{ parts: [{ text: systemPrompt }] }],
-                tools: [{ google_search: {} }] 
+                tools: [{ google_search: {} }]
             };
 
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${apiKey}`, {
@@ -651,7 +629,7 @@ OUTPUT (NUR JSON)
             if (!response.ok) throw new Error(response.status);
 
             const data = await response.json();
-            
+
             if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
                  throw new Error("Invalid API Response Structure");
             }
@@ -664,8 +642,8 @@ OUTPUT (NUR JSON)
 
         } catch (error) {
             console.warn(`Error with ${currentModel}: ${error.message}`);
-            retryText.textContent = `Modell ${currentModel} nicht verfügbar (Code: ${error.message}). Versuche Fallback...`;
-            await new Promise(r => setTimeout(r, 1000)); 
+            retryText.textContent = `Model ${currentModel} unavailable (Code: ${error.message}). Trying fallback...`;
+            await new Promise(r => setTimeout(r, 1000));
             await tryModel(index + 1, apiKey);
         }
     }
@@ -682,32 +660,29 @@ OUTPUT (NUR JSON)
         reportTxt.textContent = data.report;
         usedModelTxt.textContent = `Data Source: Google Search via ${modelName}`;
 
-        // Reset classes and styles
-        verdictTxt.className = 'verdict-value-premium'; 
+        verdictTxt.className = 'verdict-value-premium';
         scoreVal.style.borderColor = 'rgba(255,255,255,0.05)';
         scoreVal.style.boxShadow = 'inset 0 0 20px rgba(192, 160, 98, 0.1)';
         scoreVal.style.color = 'var(--accent-gold-light)';
 
-        // Apply Premium Color Logic with Glows
-        if (data.verdict.toUpperCase().includes('BULL')) {
+        if (String(data.verdict).toUpperCase().includes('BULL')) {
             verdictTxt.classList.add('v-bullish');
             scoreVal.style.borderColor = 'var(--success)';
             scoreVal.style.boxShadow = '0 0 40px var(--success-glow), inset 0 0 20px rgba(16, 185, 129, 0.2)';
             scoreVal.style.color = 'var(--success)';
-        } else if (data.verdict.toUpperCase().includes('BEAR')) {
+        } else if (String(data.verdict).toUpperCase().includes('BEAR')) {
             verdictTxt.classList.add('v-bearish');
             scoreVal.style.borderColor = 'var(--danger)';
             scoreVal.style.boxShadow = '0 0 40px var(--danger-glow), inset 0 0 20px rgba(239, 68, 68, 0.2)';
             scoreVal.style.color = 'var(--danger)';
         } else {
             verdictTxt.classList.add('v-neutral');
-             scoreVal.style.borderColor = 'var(--neutral)';
-             scoreVal.style.boxShadow = '0 0 40px rgba(245, 158, 11, 0.4)';
-             scoreVal.style.color = 'var(--neutral)';
+            scoreVal.style.borderColor = 'var(--neutral)';
+            scoreVal.style.boxShadow = '0 0 40px rgba(245, 158, 11, 0.4)';
+            scoreVal.style.color = 'var(--neutral)';
         }
 
         resultSection.style.display = 'block';
-        // Scroll to results smoothly
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 </script>
