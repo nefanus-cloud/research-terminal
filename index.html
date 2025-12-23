@@ -27,6 +27,7 @@
             --text-primary: #f5f5f7;
             --text-secondary: #86868b;
             --text-tertiary: #6e6e73;
+            --text-bright-subtitle: #d1d1d6; /* New brighter color for subtitle */
 
             /* Iridescent Gradients (The "Rainbow" Effect) */
             --gradient-iridescent: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #f472b6 100%);
@@ -114,7 +115,7 @@
 
         /* RAINBOW FROSTED TEXT STYLE */
         h1.brand-title {
-            font-size: 3.5rem;
+            font-size: 6rem; /* Increased from 3.5rem for bigger impact */
             font-weight: 700;
             margin: 0;
             letter-spacing: -0.02em;
@@ -135,8 +136,8 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
             
-            /* Frosted/Glowing Effect */
-            filter: drop-shadow(0 0 15px rgba(192, 132, 252, 0.3));
+            /* Frosted/Glowing Effect - UPDATED for sharper glow + outer bloom */
+            filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.6)) drop-shadow(0 0 30px rgba(192, 132, 252, 0.4));
             
             /* Subtle Shine Animation */
             animation: textShine 4s linear infinite;
@@ -147,11 +148,13 @@
         }
 
         .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-top: 0.8rem;
+            color: var(--text-bright-subtitle); /* UPDATED: Brighter color */
+            font-size: 1.25rem; 
+            margin-top: 0.5rem;
             font-weight: 400;
             letter-spacing: 0.02em;
+            /* UPDATED: Subtle glow for readability */
+            text-shadow: 0 0 15px rgba(255,255,255,0.1);
         }
 
         /* --- Apple-style Frosted Glass Card --- */
@@ -181,7 +184,7 @@
         }
 
         /* --- Inputs --- */
-        .input-group { margin-bottom: 2rem; }
+        .input-group { margin-bottom: 1.5rem; }
 
         label.premium-label {
             display: flex;
@@ -224,11 +227,69 @@
             box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
         }
 
-        /* Custom Placeholder Color */
+        /* Security Note Style */
+        .security-note {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-top: 0.8rem;
+            padding-left: 4px;
+        }
+
+        /* Custom Placeholder Color - UPDATED: Increased contrast */
         ::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5); /* Was 0.3 */
             font-weight: 300;
         }
+
+        /* --- Horizon Selector --- */
+        .horizon-selector-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .horizon-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            font-family: var(--font-main);
+        }
+
+        .horizon-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .horizon-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            font-weight: 600;
+        }
+        
+        /* Optional glow for active state */
+        .horizon-btn.active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+            pointer-events: none;
+        }
+
 
         .info-text {
             font-size: 0.95rem;
@@ -498,7 +559,7 @@
 
         /* --- Mobile --- */
         @media (max-width: 600px) {
-            h1.brand-title { font-size: 2.2rem; }
+            h1.brand-title { font-size: 3.5rem; } /* Adjusted mobile size up from 2.2rem */
             .score-header { flex-direction: column; text-align: center; gap: 2rem;}
             .verdict-box { text-align: center; }
             .glass-card { padding: 1.5rem; }
@@ -555,12 +616,28 @@
                 Gemini API Key
                 <span class="clear-key-link" onclick="clearKey()" title="Remove key from local storage">Clear saved key</span>
             </label>
-            <input type="password" id="apiKey" placeholder="input your key here">
+            <!-- Clean placeholder, info moved below -->
+            <input type="password" id="apiKey" placeholder="Enter Gemini API Key">
+            
+            <!-- New adequate location for storage info -->
+            <div class="security-note">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Your key is stored securely in your browser's local storage.
+            </div>
+        </div>
+
+        <!-- NEW HORIZON SELECTOR -->
+        <label class="premium-label">Analysis Horizon</label>
+        <div class="horizon-selector-container">
+            <button class="horizon-btn" onclick="selectHorizon(this, 'Day')">Day</button>
+            <button class="horizon-btn active" onclick="selectHorizon(this, 'Week')">Week</button>
+            <button class="horizon-btn" onclick="selectHorizon(this, 'Month')">Month</button>
+            <button class="horizon-btn" onclick="selectHorizon(this, 'Year')">Year</button>
         </div>
 
         <div class="info-text">
             <span style="color: #fff; font-weight: 500;">Research Protocol:</span>
-            The system executes a live Google Search Grounding to extract Real Yields, CPI, VIX, Policy Rates, and Commodity prices. Data is processed locally in your browser.
+            System executes deep search for Momentum (Tech/BTC), Liquidity Stress (Yields), and Volatility. Scoring weights adapt automatically to the selected time horizon.
         </div>
 
         <button class="btn-iridescent" onclick="startAnalysisChain()">Initialize Analysis</button>
@@ -570,7 +647,7 @@
     <div id="loading" class="loading-container">
         <div class="iridescent-spinner"></div>
         <div id="loading-text">Synthesizing Data...</div>
-        <div id="loading-subtext">Scanning Global Markets & Central Banks</div>
+        <div id="loading-subtext">Calculating Vectors for Selected Horizon</div>
         <div id="retry-status"></div>
     </div>
 
@@ -615,7 +692,7 @@
             <div class="score-circle-premium" id="scoreValue">--</div>
 
             <div class="verdict-box">
-                <span class="verdict-label">Regime Forecast</span>
+                <span class="verdict-label" id="forecast-label">Regime Forecast (Week)</span>
                 <div class="verdict-value-premium" id="verdictText">--</div>
                 <div class="used-model-badge" id="usedModelDisplay">Waiting for input...</div>
             </div>
@@ -629,44 +706,81 @@
         </div>
 
         <div class="model-breakdown-container">
-            <span class="breakdown-title">Weekly Weighting Logic</span>
-            <div class="model-breakdown-grid">
-                <div class="breakdown-pill">
-                    <span class="pill-weight">35%</span> Macro / Yields
-                </div>
-                <div class="breakdown-pill">
-                    <span class="pill-weight">25%</span> Fed Policy
-                </div>
-                <div class="breakdown-pill">
-                    <span class="pill-weight">15%</span> Tech Flow
-                </div>
-                <div class="breakdown-pill">
-                    <span class="pill-weight">15%</span> Volatility
-                </div>
-                <div class="breakdown-pill">
-                    <span class="pill-weight">10%</span> Geopolitics
-                </div>
+            <span class="breakdown-title" id="weighting-title">High-Predictability Weighting (Week Horizon)</span>
+            <div class="model-breakdown-grid" id="breakdown-grid">
+                <!-- Weights injected via JS -->
+                <div class="breakdown-pill"><span class="pill-weight">--%</span> Loading...</div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Priority List: Restored user requested models, with robust fallback
     const MODEL_PRIORITY = [
         "gemini-3-pro-preview",
         "gemini-3-flash-preview",
-        "gemini-2.5-flash" // Fallback ensures stability
+        "gemini-2.5-flash" 
     ];
 
     const STORAGE_KEY = 'aura_gemini_key';
+    let currentHorizon = 'Week'; // Default
 
     document.addEventListener('DOMContentLoaded', () => {
         const savedKey = localStorage.getItem(STORAGE_KEY);
         if (savedKey) {
             document.getElementById('apiKey').value = savedKey;
         }
+        updateWeightsUI('Week');
     });
+
+    function selectHorizon(btn, horizon) {
+        // Update UI
+        document.querySelectorAll('.horizon-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentHorizon = horizon;
+        updateWeightsUI(horizon);
+    }
+
+    function updateWeightsUI(horizon) {
+        const label = document.getElementById('forecast-label');
+        const title = document.getElementById('weighting-title');
+        const grid = document.getElementById('breakdown-grid');
+
+        label.textContent = `Regime Forecast (${horizon})`;
+        title.textContent = `Optimized Weighting (${horizon} Horizon)`;
+
+        let pills = '';
+        if (horizon === 'Day') {
+             pills = `
+                <div class="breakdown-pill"><span class="pill-weight">40%</span> Intraday Mom.</div>
+                <div class="breakdown-pill"><span class="pill-weight">30%</span> VIX/Vol</div>
+                <div class="breakdown-pill"><span class="pill-weight">20%</span> News/Flow</div>
+                <div class="breakdown-pill"><span class="pill-weight">10%</span> Macro</div>
+             `;
+        } else if (horizon === 'Week') {
+             pills = `
+                <div class="breakdown-pill"><span class="pill-weight">30%</span> Momentum</div>
+                <div class="breakdown-pill"><span class="pill-weight">25%</span> Volatility</div>
+                <div class="breakdown-pill"><span class="pill-weight">25%</span> Yields</div>
+                <div class="breakdown-pill"><span class="pill-weight">20%</span> Macro</div>
+             `;
+        } else if (horizon === 'Month') {
+             pills = `
+                <div class="breakdown-pill"><span class="pill-weight">40%</span> Macro Data</div>
+                <div class="breakdown-pill"><span class="pill-weight">30%</span> Earnings</div>
+                <div class="breakdown-pill"><span class="pill-weight">20%</span> Fed Policy</div>
+                <div class="breakdown-pill"><span class="pill-weight">10%</span> Seasonality</div>
+             `;
+        } else if (horizon === 'Year') {
+             pills = `
+                <div class="breakdown-pill"><span class="pill-weight">40%</span> Fed/Rates</div>
+                <div class="breakdown-pill"><span class="pill-weight">30%</span> Valuation</div>
+                <div class="breakdown-pill"><span class="pill-weight">20%</span> Geopolitics</div>
+                <div class="breakdown-pill"><span class="pill-weight">10%</span> Demographics</div>
+             `;
+        }
+        grid.innerHTML = pills;
+    }
 
     function clearKey() {
         if(confirm('Do you really want to remove the stored API key?')) {
@@ -685,14 +799,14 @@
         const retryText = document.getElementById('retry-status');
 
         if (!apiKey) {
-            alert('Please input your key here.');
+            alert('Please enter your Gemini API Key.');
             return;
         }
 
         localStorage.setItem(STORAGE_KEY, apiKey);
 
         btn.disabled = true;
-        btn.innerHTML = "Analysing...";
+        btn.innerHTML = `Analyzing (${currentHorizon})...`;
         loadingDiv.style.display = 'block';
         resultDiv.style.display = 'none';
         retryText.textContent = "";
@@ -709,7 +823,7 @@
         const retryText = document.getElementById('retry-status');
 
         if (index >= MODEL_PRIORITY.length) {
-            alert("Analysis Failed: Unable to connect to Gemini or Search Grounding is unavailable. Please check your API key permissions.");
+            alert("Analysis Failed: Unable to connect to Gemini or Search Grounding is unavailable.");
             return;
         }
 
@@ -719,50 +833,56 @@
         try {
             const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-            // Updated System Prompt for more data elements
+            // Updated System Prompt with Dynamic Horizon Logic
             const systemPrompt = `
 Date: ${today}.
 Role: Quantitative Market Strategist.
 Tools: Google Search (MANDATORY).
 
 TASK:
-1. Search for current market data: US 10Y Yield, US Inflation (CPI/PCE), CBOE VIX, Nasdaq Composite 5D %.
-2. **CRITICAL:** Search for the specific CURRENT policy rates:
-   - Federal Reserve Funds Rate (Upper Limit).
-   - European Central Bank (ECB) Main Refinancing Operations Rate.
-3. **NEW:** Search for live prices:
-   - Bitcoin (BTC/USD)
-   - Gold (XAU/USD)
-   - US 10Y Yield (Current Value)
-4. Perform the AURA Weekly Forecast scoring logic.
+1. Search for current market data: US 10Y Yield, US Inflation (CPI/PCE), CBOE VIX, Nasdaq Composite (Last close & 5D%), Bitcoin (BTC/USD), Gold (XAU/USD).
+2. Search for current policy rates (Fed Funds, ECB Refi).
+3. **PERFORM OPTIMIZED SCORING for specific Horizon: ${currentHorizon.toUpperCase()}**
 
-SCORING LOGIC (0-100 scale):
-- Macro: Yields > 4.0% is bearish. Inflation > 2.5% is bearish.
-- Fed: Hawkish words = Bearish (-). Dovish words = Bullish (+).
-- Tech: Nasdaq 5D > 2% (Bullish), < -2% (Bearish).
-- VIX: < 15 (Bullish), > 20 (Bearish).
-- Geo: Risk of escalation = Bearish.
+**SCORING STRATEGY FOR ${currentHorizon.toUpperCase()}:**
 
-Total Score = (Macro*0.35) + (Fed*0.25) + (Tech*0.15) + (VIX*0.15) + (Geo*0.10)
+IF HORIZON = "DAY":
+   - Focus 80% on Technical Momentum (Intraday/1D changes in Nasdaq/BTC) and VIX level.
+   - Focus 20% on any "Breaking News" today.
+   - Ignore long-term valuation.
+   - Score: High Volatility/Momentum = Bullish (if Green) or Bearish (if Red).
 
-VERDICT:
+IF HORIZON = "WEEK":
+   - Momentum (30%), Volatility (25%), Yield Stress (25%), Macro (20%).
+   - Use standard AURA logic provided previously.
+   - VIX < 15 is Bullish. Yields > 4.3% Bearish.
+
+IF HORIZON = "MONTH":
+   - Focus on MACRO TRENDS: Inflation trajectory, Jobs data, Monthly Earnings revisions.
+   - Momentum is secondary.
+   - Yield Curve shape matters more than daily moves.
+
+IF HORIZON = "YEAR":
+   - Focus on SECULAR CYCLES: Fed Interest Rate Path (Dot Plot), Valuations (PE Ratio), Geopolitics.
+   - Daily volatility is noise.
+   - Score based on "Recession Risk" vs "Soft Landing".
+
+**VERDICT:**
 - Score >= 60: BULLISH
 - Score <= 40: BEARISH
 - Else: NEUTRAL
 
-OUTPUT FORMAT:
-Return ONLY a valid JSON object. Do not use Markdown code blocks.
-Structure:
+**OUTPUT JSON:**
 {
-  "score": number (integer),
+  "score": number (integer 0-100),
   "verdict": "BULLISH" | "BEARISH" | "NEUTRAL",
-  "report": "100-140 words executive summary mentioning key inputs.",
-  "fed_rate": "string (e.g. '5.50%')",
-  "ecb_rate": "string (e.g. '3.25%')",
-  "us10y_val": "string (e.g. '4.35%')",
-  "vix_val": "string (e.g. '14.5')",
-  "btc_val": "string (e.g. '$95,400')",
-  "gold_val": "string (e.g. '$2,650')"
+  "report": "120-150 words executive summary tailored to the ${currentHorizon} horizon.",
+  "fed_rate": "string",
+  "ecb_rate": "string",
+  "us10y_val": "string",
+  "vix_val": "string",
+  "btc_val": "string",
+  "gold_val": "string"
 }
             `;
 
@@ -796,27 +916,20 @@ Structure:
         } catch (error) {
             console.warn(`Error with ${currentModel}: ${error.message}`);
             retryText.textContent = `Model ${currentModel} failed. Switching to backup...`;
-            await new Promise(r => setTimeout(r, 1500)); // Short delay before retry
+            await new Promise(r => setTimeout(r, 1500));
             await tryModel(index + 1, apiKey);
         }
     }
 
-    // Robust JSON Extractor
     function cleanAndParseJSON(text) {
         try {
-            // 1. Try direct parse
             return JSON.parse(text);
         } catch (e) {
-            // 2. Try stripping markdown blocks
             let cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            try {
-                return JSON.parse(cleaned);
-            } catch (e2) {
-                // 3. Regex extraction of the object
+            try { return JSON.parse(cleaned); } 
+            catch (e2) {
                 const jsonMatch = text.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    return JSON.parse(jsonMatch[0]);
-                }
+                if (jsonMatch) return JSON.parse(jsonMatch[0]);
                 throw new Error("Could not parse JSON response.");
             }
         }
@@ -830,8 +943,6 @@ Structure:
         const usedModelTxt = document.getElementById('usedModelDisplay');
         const fedRateTxt = document.getElementById('fed-rate-display');
         const ecbRateTxt = document.getElementById('ecb-rate-display');
-        
-        // New Elements
         const us10yTxt = document.getElementById('us10y-display');
         const vixTxt = document.getElementById('vix-display');
         const btcTxt = document.getElementById('btc-display');
@@ -843,7 +954,6 @@ Structure:
         reportTxt.textContent = data.report;
         fedRateTxt.textContent = data.fed_rate || "N/A";
         ecbRateTxt.textContent = data.ecb_rate || "N/A";
-        
         us10yTxt.textContent = data.us10y_val || "--";
         vixTxt.textContent = data.vix_val || "--";
         btcTxt.textContent = data.btc_val || "--";
@@ -853,17 +963,13 @@ Structure:
 
         // Styling based on Verdict
         verdictTxt.className = 'verdict-value-premium';
-        // Reset score circle styling to default rainbow first
         scoreVal.style.color = '#fff';
-        
-        // Remove old classes
         verdictTxt.classList.remove('v-bullish', 'v-bearish', 'v-neutral');
 
         const vUpper = String(data.verdict).toUpperCase();
         if (vUpper.includes('BULL')) {
             verdictTxt.classList.add('v-bullish');
             scoreVal.style.color = 'var(--success)';
-            // Override gradient for specific states if desired, or keep rainbow
         } else if (vUpper.includes('BEAR')) {
             verdictTxt.classList.add('v-bearish');
             scoreVal.style.color = 'var(--danger)';
