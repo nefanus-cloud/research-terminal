@@ -742,45 +742,54 @@
     }
 
     function updateWeightsUI(horizon) {
-        const label = document.getElementById('forecast-label');
-        const title = document.getElementById('weighting-title');
-        const grid = document.getElementById('breakdown-grid');
+  const label = document.getElementById('forecast-label');
+  const title = document.getElementById('weighting-title');
+  const grid = document.getElementById('breakdown-grid');
 
-        label.textContent = `Regime Forecast (${horizon})`;
-        title.textContent = `Optimized Weighting (${horizon} Horizon)`;
+  label.textContent = `Regime Forecast (${horizon})`;
+  title.textContent = `Market-Credited Weighting (${horizon} Horizon)`;
 
-        let pills = '';
-        if (horizon === 'Day') {
-             pills = `
-                <div class="breakdown-pill"><span class="pill-weight">40%</span> Intraday Mom.</div>
-                <div class="breakdown-pill"><span class="pill-weight">30%</span> VIX/Vol</div>
-                <div class="breakdown-pill"><span class="pill-weight">20%</span> News/Flow</div>
-                <div class="breakdown-pill"><span class="pill-weight">10%</span> Macro</div>
-             `;
-        } else if (horizon === 'Week') {
-             pills = `
-                <div class="breakdown-pill"><span class="pill-weight">30%</span> Momentum</div>
-                <div class="breakdown-pill"><span class="pill-weight">25%</span> Volatility</div>
-                <div class="breakdown-pill"><span class="pill-weight">25%</span> Yields</div>
-                <div class="breakdown-pill"><span class="pill-weight">20%</span> Macro</div>
-             `;
-        } else if (horizon === 'Month') {
-             pills = `
-                <div class="breakdown-pill"><span class="pill-weight">40%</span> Macro Data</div>
-                <div class="breakdown-pill"><span class="pill-weight">30%</span> Earnings</div>
-                <div class="breakdown-pill"><span class="pill-weight">20%</span> Fed Policy</div>
-                <div class="breakdown-pill"><span class="pill-weight">10%</span> Seasonality</div>
-             `;
-        } else if (horizon === 'Year') {
-             pills = `
-                <div class="breakdown-pill"><span class="pill-weight">40%</span> Fed/Rates</div>
-                <div class="breakdown-pill"><span class="pill-weight">30%</span> Valuation</div>
-                <div class="breakdown-pill"><span class="pill-weight">20%</span> Geopolitics</div>
-                <div class="breakdown-pill"><span class="pill-weight">10%</span> Demographics</div>
-             `;
-        }
-        grid.innerHTML = pills;
-    }
+  let pills = '';
+
+  if (horizon === 'Day') {
+    // Prompt weights: Price 45 / Vol 35 / Yields 15 / Headlines 5
+    pills = `
+      <div class="breakdown-pill"><span class="pill-weight">45%</span> Price Momentum</div>
+      <div class="breakdown-pill"><span class="pill-weight">35%</span> Volatility (VIX)</div>
+      <div class="breakdown-pill"><span class="pill-weight">15%</span> Yield Stress (10Y)</div>
+      <div class="breakdown-pill"><span class="pill-weight">5%</span> Headlines</div>
+    `;
+  } else if (horizon === 'Week') {
+    // Prompt weights: Price 35 / Vol 25 / Yields 20 / Macro 15 / Gold 5
+    pills = `
+      <div class="breakdown-pill"><span class="pill-weight">35%</span> Price Momentum</div>
+      <div class="breakdown-pill"><span class="pill-weight">25%</span> Volatility (VIX)</div>
+      <div class="breakdown-pill"><span class="pill-weight">20%</span> Yield Stress (10Y)</div>
+      <div class="breakdown-pill"><span class="pill-weight">15%</span> Macro Trend</div>
+      <div class="breakdown-pill"><span class="pill-weight">5%</span> Gold Confirm</div>
+    `;
+  } else if (horizon === 'Month') {
+    // Prompt weights: Price 25 / Yields 25 / Macro 25 / Vol 15 / Gold 10
+    pills = `
+      <div class="breakdown-pill"><span class="pill-weight">25%</span> Price Momentum</div>
+      <div class="breakdown-pill"><span class="pill-weight">25%</span> Yield Stress (10Y)</div>
+      <div class="breakdown-pill"><span class="pill-weight">25%</span> Macro Trend</div>
+      <div class="breakdown-pill"><span class="pill-weight">15%</span> Volatility (VIX)</div>
+      <div class="breakdown-pill"><span class="pill-weight">10%</span> Gold Confirm</div>
+    `;
+  } else if (horizon === 'Year') {
+    // Prompt weights: Macro 35 / Yields 25 / Price 20 / Vol 10 / Gold 10
+    pills = `
+      <div class="breakdown-pill"><span class="pill-weight">35%</span> Macro Trend</div>
+      <div class="breakdown-pill"><span class="pill-weight">25%</span> Yield Stress (10Y)</div>
+      <div class="breakdown-pill"><span class="pill-weight">20%</span> Price Momentum</div>
+      <div class="breakdown-pill"><span class="pill-weight">10%</span> Volatility (VIX)</div>
+      <div class="breakdown-pill"><span class="pill-weight">10%</span> Gold Confirm</div>
+    `;
+  }
+
+  grid.innerHTML = pills;
+}
 
     function clearKey() {
         if(confirm('Do you really want to remove the stored API key?')) {
