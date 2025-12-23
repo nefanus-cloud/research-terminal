@@ -5,112 +5,182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AURA | Quantitative Market Sentinel</title>
 
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23EAD2A8'/%3E%3Cstop offset='100%25' style='stop-color:%23C0A062'/%3E%3C/linearGradient%3E%3Cfilter id='f' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='2' result='b'/%3E%3CfeMerge%3E%3CfeMergeNode in='b'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='30' fill='%230f172a' stroke='url(%23g)' stroke-width='2'/%3E%3Cpath d='M32 14L50 50H14L32 14Z' fill='none' stroke='url(%23g)' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' filter='url(%23f)'/%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- Dynamic Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' style='stop-color:%2360a5fa'/%3E%3Cstop offset='50%25' style='stop-color:%23c084fc'/%3E%3Cstop offset='100%25' style='stop-color:%23f472b6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='30' fill='%23000000' stroke='url(%23g)' stroke-width='2'/%3E%3Cpath d='M32 14L50 50H14L32 14Z' fill='none' stroke='url(%23g)' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" type="image/svg+xml">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=SF+Pro+Display:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-main: #020617;
-            --bg-secondary: #0f172a;
+            /* Apple-esque Dark Mode Palette */
+            --bg-deep: #000000;
+            
+            /* Glassmorphism Variables */
+            --glass-surface: rgba(20, 20, 23, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --glass-blur: blur(40px);
+            
+            /* Text Colors */
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            --text-tertiary: #6e6e73;
 
-            --card-glass-bg: rgba(15, 23, 42, 0.6);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --glass-blur: blur(20px);
+            /* Iridescent Gradients (The "Rainbow" Effect) */
+            --gradient-iridescent: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #f472b6 100%);
+            
+            /* Semantic Colors */
+            --success: #32d74b;
+            --danger: #ff453a;
+            --neutral: #ff9f0a;
 
-            --text-bright: #ffffff;
-            --text-muted: #94a3b8;
-
-            --accent-gold: #C0A062;
-            --accent-gold-light: #EAD2A8;
-            --accent-gold-glow: rgba(192, 160, 98, 0.4);
-
-            --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.4);
-            --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.4);
-            --neutral: #f59e0b;
-
-            --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', sans-serif;
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background-color: var(--bg-main);
-            background: radial-gradient(circle at top right, #1e293b 0%, transparent 45%),
-                        radial-gradient(circle at bottom left, #172554 0%, transparent 45%),
-                        var(--bg-main);
-            background-attachment: fixed;
-            color: var(--text-bright);
-            font-family: var(--font-sans);
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-main);
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            font-weight: 300;
+            overflow-x: hidden; /* Prevent horizontal scroll from effects */
             -webkit-font-smoothing: antialiased;
         }
 
+        /* --- Ambient Background Orbs --- */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: floatOrb 20s infinite ease-in-out;
+        }
+
+        /* Responsive Orb Sizes */
+        .orb-1 { width: min(600px, 60vw); height: min(600px, 60vw); background: #2563eb; top: -10%; left: -10%; animation-delay: 0s; }
+        .orb-2 { width: min(500px, 50vw); height: min(500px, 50vw); background: #9333ea; bottom: -10%; right: -10%; animation-delay: -5s; }
+        .orb-3 { width: min(400px, 40vw); height: min(400px, 40vw); background: #db2777; top: 40%; left: 40%; animation-delay: -10s; opacity: 0.2; }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* --- Ticker --- */
         .tv-ticker-wrapper {
             width: 100%;
             height: 48px;
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(2, 6, 23, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--card-border);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .container {
             width: 100%;
-            max-width: 900px;
-            padding: 4rem 2rem 2rem 2rem;
+            max-width: 860px;
+            padding: 5rem 2rem 3rem 2rem;
             box-sizing: border-box;
+            position: relative;
+            z-index: 1;
         }
 
+        /* --- Typography --- */
         header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
 
+        /* RAINBOW FROSTED TEXT STYLE */
         h1.brand-title {
-            font-family: var(--font-serif);
             font-size: 3.5rem;
             font-weight: 700;
             margin: 0;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, var(--accent-gold-light), var(--accent-gold));
+            letter-spacing: -0.02em;
+            
+            /* Rainbow Gradient Background */
+            background: linear-gradient(
+                135deg, 
+                #60a5fa 0%, 
+                #c084fc 25%, 
+                #f472b6 50%, 
+                #c084fc 75%, 
+                #60a5fa 100%
+            );
+            background-size: 200% auto;
+            
+            /* Clip to text */
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 4px 30px var(--accent-gold-glow);
+            
+            /* Frosted/Glowing Effect */
+            filter: drop-shadow(0 0 15px rgba(192, 132, 252, 0.3));
+            
+            /* Subtle Shine Animation */
+            animation: textShine 4s linear infinite;
+        }
+
+        @keyframes textShine {
+            to { background-position: 200% center; }
         }
 
         .subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
             margin-top: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-weight: 500;
+            font-weight: 400;
+            letter-spacing: 0.02em;
         }
 
+        /* --- Apple-style Frosted Glass Card --- */
         .glass-card {
-            background: var(--card-glass-bg);
+            background: var(--glass-surface);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 
+                0 40px 80px -20px rgba(0, 0, 0, 0.5),
+                inset 0 0 0 1px var(--glass-highlight);
             margin-bottom: 2.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            word-wrap: break-word; /* Prevents layout breaks */
+        }
+        
+        /* Subtle shine effect on top of card */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
         }
 
+        /* --- Inputs --- */
         .input-group { margin-bottom: 2rem; }
 
         label.premium-label {
@@ -118,224 +188,335 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.8rem;
-            color: var(--accent-gold);
+            color: var(--text-secondary);
             font-size: 0.85rem;
             font-weight: 500;
-            letter-spacing: 1px;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .clear-key-link {
             font-size: 0.75rem;
-            color: var(--text-muted);
-            text-decoration: underline;
+            color: var(--text-tertiary);
+            text-decoration: none;
             cursor: pointer;
-            text-transform: none;
-            letter-spacing: 0;
-            opacity: 0.7;
-            transition: opacity 0.2s;
+            transition: color 0.2s;
         }
-        .clear-key-link:hover { opacity: 1; color: var(--danger); }
+        .clear-key-link:hover { color: var(--danger); }
 
         input[type="password"] {
             width: 100%;
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-bright);
-            padding: 16px;
-            border-radius: 8px;
-            font-family: var(--font-sans);
-            font-size: 1rem;
+            color: var(--text-primary);
+            padding: 18px 20px;
+            border-radius: 14px;
+            font-family: var(--font-main);
+            font-size: 16px; /* Prevents iOS zoom */
             box-sizing: border-box;
             transition: all 0.3s ease;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 20px var(--accent-gold-glow);
-            background: rgba(255, 255, 255, 0.05);
+            border-color: #60a5fa;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+        }
+
+        /* Custom Placeholder Color */
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 300;
         }
 
         .info-text {
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            font-size: 0.95rem;
+            color: var(--text-secondary);
             line-height: 1.6;
-            background: rgba(192, 160, 98, 0.05);
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 3px solid var(--accent-gold);
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
         }
 
-        .btn-gold-premium {
-            background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
-            color: #0a0a0a;
+        /* --- Iridescent Button --- */
+        .btn-iridescent {
+            background: var(--gradient-iridescent);
+            background-size: 200% 200%;
+            animation: gradientMove 5s ease infinite;
+            color: #ffffff;
             border: none;
-            padding: 16px 32px;
-            border-radius: 8px;
+            padding: 18px 32px;
+            border-radius: 99px; /* Pill shape */
             font-weight: 600;
-            letter-spacing: 0.5px;
+            font-size: 1.1rem;
             cursor: pointer;
             width: 100%;
-            font-size: 1.1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 20px var(--accent-gold-glow);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 10px 30px -10px rgba(192, 132, 252, 0.5);
             position: relative;
             overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        .btn-gold-premium:hover {
-            box-shadow: 0 8px 30px rgba(192, 160, 98, 0.6);
-            transform: translateY(-2px);
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .btn-gold-premium:active { transform: scale(0.99); }
+        .btn-iridescent:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px -10px rgba(192, 132, 252, 0.7);
+        }
 
-        .btn-gold-premium:disabled {
-            background: #334155;
-            color: #94a3b8;
+        .btn-iridescent:active { transform: scale(0.98); }
+
+        .btn-iridescent:disabled {
+            background: #2c2c2e;
+            color: #636366;
             box-shadow: none;
             cursor: not-allowed;
             transform: none;
+            animation: none;
         }
 
+        /* --- Loading State --- */
         .loading-container {
             text-align: center;
             display: none;
-            padding: 3rem;
+            padding: 4rem 0;
         }
 
-        .premium-spinner {
+        .iridescent-spinner {
             width: 60px;
             height: 60px;
-            border: 3px solid rgba(192, 160, 98, 0.1);
-            border-top: 3px solid var(--accent-gold);
             border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            background: var(--gradient-iridescent);
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+            animation: spin 1s linear infinite;
             margin: 0 auto 1.5rem auto;
-            box-shadow: 0 0 20px var(--accent-gold-glow);
         }
 
-        #loading-text { color: var(--accent-gold); font-weight: 500; font-size: 1.2rem; margin-bottom: 0.5rem; }
-        #loading-subtext { color: var(--text-muted); }
-        #retry-status { color: var(--text-muted); font-style: italic; margin-top: 1rem; min-height: 1.2em; }
+        #loading-text { 
+            background: var(--gradient-iridescent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600; 
+            font-size: 1.2rem; 
+            margin-bottom: 0.5rem; 
+        }
+        #loading-subtext { color: var(--text-secondary); }
+        #retry-status { color: var(--text-tertiary); font-style: italic; margin-top: 1rem; min-height: 1.2em; font-size: 0.9rem; }
 
+        /* --- Results Section --- */
         #result-section {
             display: none;
-            animation: slideUpFade 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
+        /* --- Dashboard Grids --- */
+        .section-title {
+             font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; display: block; font-weight: 600;
+        }
+
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .internals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .rate-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 18px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: background 0.2s;
+        }
+        .rate-card:hover { background: rgba(255,255,255,0.05); }
+
+        .rate-title {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .rate-value {
+            font-size: 2rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .rate-value.small { font-size: 1.5rem; }
+
+        /* --- Score & Verdict --- */
         .score-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 2.5rem;
             padding-bottom: 2.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+            flex-wrap: wrap; /* Fix for mobile overlapping */
+            gap: 2rem;
         }
 
         .score-circle-premium {
             width: 140px;
             height: 140px;
             border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.05);
-            box-shadow: 0 0 40px var(--accent-gold-glow), inset 0 0 20px rgba(192, 160, 98, 0.1);
+            /* Rainbow border logic */
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3.5rem;
-            font-family: var(--font-serif);
             font-weight: 700;
-            color: var(--accent-gold-light);
-            position: relative;
+            color: #fff;
+            background: #1c1c1e; /* Inner bg */
+            z-index: 1;
+            flex-shrink: 0; /* Prevent shrinking on mobile */
+        }
+        
+        /* Gradient Border for Score Circle */
+        .score-circle-premium::before {
+            content: "";
+            position: absolute;
+            inset: -3px; /* Border width */
+            border-radius: 50%;
+            background: var(--gradient-iridescent);
+            z-index: -1;
+            opacity: 0.6;
         }
 
-        .verdict-box { text-align: right; }
-        .verdict-label { display: block; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem;}
+        .verdict-box { 
+            text-align: right; 
+            flex-grow: 1;
+        }
+        
+        .verdict-label { display: block; color: var(--text-secondary); font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem;}
 
         .verdict-value-premium {
             font-size: 2.5rem;
             font-weight: 700;
-            font-family: var(--font-serif);
-            letter-spacing: -1px;
-            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+            letter-spacing: -0.02em;
         }
 
         .used-model-badge {
             display: inline-block;
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--text-tertiary);
             background: rgba(255, 255, 255, 0.05);
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             margin-top: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .v-bullish { color: var(--success); text-shadow: 0 0 30px var(--success-glow); }
-        .v-bearish { color: var(--danger); text-shadow: 0 0 30px var(--danger-glow); }
+        /* --- Color Modifiers --- */
+        .v-bullish { color: var(--success); text-shadow: 0 0 40px rgba(50, 215, 75, 0.4); }
+        .v-bearish { color: var(--danger); text-shadow: 0 0 40px rgba(255, 69, 58, 0.4); }
         .v-neutral { color: var(--neutral); }
 
+        /* --- Report Text --- */
         .report-content h3 {
-            color: var(--accent-gold);
-            font-family: var(--font-serif);
+            background: linear-gradient(90deg, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
+            margin-top: 0;
+            letter-spacing: -0.01em;
         }
 
         .report-text-premium {
             line-height: 1.8;
-            color: var(--text-bright);
+            color: var(--text-primary);
             white-space: pre-line;
             font-size: 1.05rem;
             font-weight: 300;
         }
 
+        /* --- Breakdown Grid --- */
         .model-breakdown-container {
             margin-top: 3rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--glass-border);
             padding-top: 2rem;
         }
-        .breakdown-title {
-             font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1.5rem; display: block;
-        }
+        
         .model-breakdown-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1rem;
         }
 
         .breakdown-pill {
             background: rgba(255, 255, 255, 0.03);
-            padding: 12px 16px;
-            border-radius: 12px;
+            padding: 14px 18px;
+            border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             font-size: 0.9rem;
-            color: var(--text-muted);
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .breakdown-pill:hover { 
+            background: rgba(255,255,255,0.06); 
+            border-color: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
         }
 
         .pill-weight {
             font-weight: 700;
-            color: var(--accent-gold-light);
+            /* Gradient text for percentage */
+            background: var(--gradient-iridescent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-right: 10px;
             font-size: 1.1rem;
         }
 
+        /* --- Animations --- */
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(40px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
+        /* --- Mobile --- */
         @media (max-width: 600px) {
-            h1.brand-title { font-size: 2.5rem; }
-            .score-header { flex-direction: column; text-align: center; }
-            .verdict-box { text-align: center; margin-top: 2rem; }
+            h1.brand-title { font-size: 2.2rem; }
+            .score-header { flex-direction: column; text-align: center; gap: 2rem;}
+            .verdict-box { text-align: center; }
             .glass-card { padding: 1.5rem; }
+            .rates-grid { grid-template-columns: 1fr; }
+            .orb { opacity: 0.3; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Ambient Background -->
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- TradingView Ticker Tape -->
     <div class="tv-ticker-wrapper">
         <div class="tradingview-widget-container">
             <div class="tradingview-widget-container__widget"></div>
@@ -348,7 +529,9 @@
                 { "proName": "NASDAQ:GOOGL", "title": "Alphabet" },
                 { "proName": "NASDAQ:AMZN", "title": "Amazon" },
                 { "proName": "NASDAQ:META", "title": "Meta" },
-                { "proName": "NASDAQ:TSLA", "title": "Tesla" }
+                { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
+                { "proName": "FOREXCOM:NSXUSD", "title": "US 100" },
+                { "proName": "FX:EURUSD", "title": "EUR/USD" }
             ],
             "showSymbolLogo": true,
             "colorTheme": "dark",
@@ -362,67 +545,103 @@
 
 <div class="container">
     <header>
-        <h1 class="brand-title">AURA ANALYTICS</h1>
-        <div class="subtitle">Weekly Market Regime Forecast • Institutional Grade • Gemini Powered</div>
+        <h1 class="brand-title">AURA</h1>
+        <div class="subtitle">Quantitative Market Intelligence</div>
     </header>
 
     <div class="glass-card">
         <div class="input-group">
             <label for="apiKey" class="premium-label">
-                Gemini API Access Key
-                <span class="clear-key-link" onclick="clearKey()" title="Remove key from local storage">Clear key</span>
+                Gemini API Key
+                <span class="clear-key-link" onclick="clearKey()" title="Remove key from local storage">Clear saved key</span>
             </label>
-            <input type="password" id="apiKey" placeholder="Your API key (stored securely on this device)">
+            <input type="password" id="apiKey" placeholder="input your key here">
         </div>
 
-        <div class="info-text" style="margin-bottom: 2rem;">
-            <strong style="color: var(--accent-gold);">Autonomous Research Protocol (Weekly Forecast):</strong>
-            The system initiates real-time web research (Google Search Grounding), extracts consistent market inputs (US10Y, CPI/PCE, VIX, Fed, Nasdaq 5D, geopolitics), and computes a tactical weekly forecast (3–7 trading days).
+        <div class="info-text">
+            <span style="color: #fff; font-weight: 500;">Research Protocol:</span>
+            The system executes a live Google Search Grounding to extract Real Yields, CPI, VIX, Policy Rates, and Commodity prices. Data is processed locally in your browser.
         </div>
 
-        <button class="btn-gold-premium" onclick="startAnalysisChain()">Start Live Analysis</button>
+        <button class="btn-iridescent" onclick="startAnalysisChain()">Initialize Analysis</button>
     </div>
 
+    <!-- Loading Screen -->
     <div id="loading" class="loading-container">
-        <div class="premium-spinner"></div>
-        <div id="loading-text">Initializing analysis pipeline...</div>
-        <div id="loading-subtext">Scanning live market data...</div>
+        <div class="iridescent-spinner"></div>
+        <div id="loading-text">Synthesizing Data...</div>
+        <div id="loading-subtext">Scanning Global Markets & Central Banks</div>
         <div id="retry-status"></div>
     </div>
 
+    <!-- Results Dashboard -->
     <div id="result-section" class="glass-card">
+        
+        <!-- Live Rates Display -->
+        <h4 class="section-title">Central Bank Policy</h4>
+        <div class="rates-grid">
+            <div class="rate-card">
+                <div class="rate-title">Fed Funds (Upper)</div>
+                <div class="rate-value" id="fed-rate-display">--%</div>
+            </div>
+            <div class="rate-card">
+                <div class="rate-title">ECB (Main Refi)</div>
+                <div class="rate-value" id="ecb-rate-display">--%</div>
+            </div>
+        </div>
+
+        <!-- NEW: Market Internals -->
+        <h4 class="section-title">Market Internals</h4>
+        <div class="internals-grid">
+            <div class="rate-card">
+                <div class="rate-title">US 10Y Yield</div>
+                <div class="rate-value small" id="us10y-display">--%</div>
+            </div>
+            <div class="rate-card">
+                <div class="rate-title">VIX Index</div>
+                <div class="rate-value small" id="vix-display">--</div>
+            </div>
+            <div class="rate-card">
+                <div class="rate-title">Bitcoin (BTC)</div>
+                <div class="rate-value small" id="btc-display">--</div>
+            </div>
+            <div class="rate-card">
+                <div class="rate-title">Gold</div>
+                <div class="rate-value small" id="gold-display">--</div>
+            </div>
+        </div>
+
         <div class="score-header">
             <div class="score-circle-premium" id="scoreValue">--</div>
 
             <div class="verdict-box">
-                <span class="verdict-label">Overall Sentiment</span>
+                <span class="verdict-label">Regime Forecast</span>
                 <div class="verdict-value-premium" id="verdictText">--</div>
-                <div class="used-model-badge" id="usedModelDisplay">Waiting for data...</div>
-                <div class="used-model-badge" style="margin-left: 8px;">Horizon: Weekly (3–7 trading days)</div>
+                <div class="used-model-badge" id="usedModelDisplay">Waiting for input...</div>
             </div>
         </div>
 
         <div class="report-content">
-            <h3>Executive Summary & Research</h3>
+            <h3>Executive Summary</h3>
             <p id="reportText" class="report-text-premium">
-                The analysis will appear here once the data has been processed.
+                Awaiting analysis initialization.
             </p>
         </div>
 
         <div class="model-breakdown-container">
-            <span class="breakdown-title">Applied Weighting Model (Weekly Forecast)</span>
+            <span class="breakdown-title">Weekly Weighting Logic</span>
             <div class="model-breakdown-grid">
                 <div class="breakdown-pill">
-                    <span class="pill-weight">35%</span> Macro (Yields/Inflation)
+                    <span class="pill-weight">35%</span> Macro / Yields
                 </div>
                 <div class="breakdown-pill">
                     <span class="pill-weight">25%</span> Fed Policy
                 </div>
                 <div class="breakdown-pill">
-                    <span class="pill-weight">15%</span> Tech (Nasdaq 5D)
+                    <span class="pill-weight">15%</span> Tech Flow
                 </div>
                 <div class="breakdown-pill">
-                    <span class="pill-weight">15%</span> VIX / Risk Regime
+                    <span class="pill-weight">15%</span> Volatility
                 </div>
                 <div class="breakdown-pill">
                     <span class="pill-weight">10%</span> Geopolitics
@@ -433,10 +652,11 @@
 </div>
 
 <script>
+    // Priority List: Restored user requested models, with robust fallback
     const MODEL_PRIORITY = [
         "gemini-3-pro-preview",
         "gemini-3-flash-preview",
-        "gemini-2.5-flash"
+        "gemini-2.5-flash" // Fallback ensures stability
     ];
 
     const STORAGE_KEY = 'aura_gemini_key';
@@ -461,18 +681,18 @@
         const apiKey = apiKeyInput.value.trim();
         const loadingDiv = document.getElementById('loading');
         const resultDiv = document.getElementById('result-section');
-        const btn = document.querySelector('.btn-gold-premium');
+        const btn = document.querySelector('.btn-iridescent');
         const retryText = document.getElementById('retry-status');
 
         if (!apiKey) {
-            alert('Please enter a valid Gemini API key.');
+            alert('Please input your key here.');
             return;
         }
 
         localStorage.setItem(STORAGE_KEY, apiKey);
 
         btn.disabled = true;
-        btn.innerHTML = "Analyzing...";
+        btn.innerHTML = "Analysing...";
         loadingDiv.style.display = 'block';
         resultDiv.style.display = 'none';
         retryText.textContent = "";
@@ -480,7 +700,7 @@
         await tryModel(0, apiKey);
 
         btn.disabled = false;
-        btn.innerHTML = "Start Live Analysis";
+        btn.innerHTML = "Initialize Analysis";
         loadingDiv.style.display = 'none';
     }
 
@@ -489,129 +709,60 @@
         const retryText = document.getElementById('retry-status');
 
         if (index >= MODEL_PRIORITY.length) {
-            alert("Critical error: none of the available models could process the request. Please verify your API key permissions (Search Grounding).");
+            alert("Analysis Failed: Unable to connect to Gemini or Search Grounding is unavailable. Please check your API key permissions.");
             return;
         }
 
         const currentModel = MODEL_PRIORITY[index];
-        statusText.textContent = `Processing with model: ${currentModel}...`;
+        statusText.textContent = `Processing via ${currentModel}...`;
 
         try {
             const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
+            // Updated System Prompt for more data elements
             const systemPrompt = `
-Date today: ${today}. Timezone: Europe/Vienna.
+Date: ${today}.
+Role: Quantitative Market Strategist.
+Tools: Google Search (MANDATORY).
 
-You are a quantitative market analyst. You MUST use Google Search tools.
-Goal: maximum reproducibility, minimal variance between runs.
+TASK:
+1. Search for current market data: US 10Y Yield, US Inflation (CPI/PCE), CBOE VIX, Nasdaq Composite 5D %.
+2. **CRITICAL:** Search for the specific CURRENT policy rates:
+   - Federal Reserve Funds Rate (Upper Limit).
+   - European Central Bank (ECB) Main Refinancing Operations Rate.
+3. **NEW:** Search for live prices:
+   - Bitcoin (BTC/USD)
+   - Gold (XAU/USD)
+   - US 10Y Yield (Current Value)
+4. Perform the AURA Weekly Forecast scoring logic.
 
-IMPORTANT: This analysis is a tactical WEEKLY forecast (Weekly Market Regime Forecast).
-Validity: primarily for the next 3–7 trading days (max. 10 trading days). Not suitable for intraday trading or long-term buy-and-hold decisions.
+SCORING LOGIC (0-100 scale):
+- Macro: Yields > 4.0% is bearish. Inflation > 2.5% is bearish.
+- Fed: Hawkish words = Bearish (-). Dovish words = Bullish (+).
+- Tech: Nasdaq 5D > 2% (Bullish), < -2% (Bearish).
+- VIX: < 15 (Bullish), > 20 (Bearish).
+- Geo: Risk of escalation = Bearish.
 
-====================
-FIXED DATA RULES
-====================
-
-1) US 10Y Yield:
-   - Use the latest available close or the most recently published value.
-   - Format: percent with 2 decimals.
-
-2) Inflation:
-   - Use the latest released US CPI YoY.
-   - If CPI is not available: PCE YoY.
-   - Format: 1 decimal, explicitly label CPI or PCE.
-
-3) VIX:
-   - Use the most recently published CBOE VIX Index value.
-   - Format: integer or 1 decimal.
-
-4) Fed Policy:
-   - Use the latest official Fed document (FOMC Statement, Minutes, or a Powell speech).
-   - Extract:
-     • release date (YYYY-MM-DD)
-     • one short evidence sentence (max 25 words, paraphrased)
-
-5) Tech:
-   - Nasdaq Composite performance over the last 5 trading days (5D %).
-   - If not possible: latest available weekly % and clearly label it.
-
-6) Geopolitics:
-   - 1–2 relevant events from the last 48h with timestamp and market impact.
-
-====================
-STRICT SCORING (0–100)
-====================
-
-A) Macro Score (0–100)
-   YieldScore = clamp(100 - ((10Y - 3.50) * 25), 0, 100)
-
-   InflationScore:
-     <= 2.0% => 100
-     > 2.0%  => clamp(100 - ((Infl - 2.0) * 20), 0, 100)
-
-   MacroScore = average(YieldScore, InflationScore)
-
-B) Fed Score (0–100)
-   Count keywords from the official Fed text:
-
-   Hawkish:
-   "higher for longer", "restrictive", "inflation remains elevated",
-   "further tightening", "strong labor market"
-
-   Dovish:
-   "cuts", "disinflation", "balanced risks",
-   "policy easing", "lower inflation"
-
-   FedScore = 50 + 10 * (DovishCount - HawkishCount)
-   Then clamp 0–100
-   If evidence is unclear: FedScore = 50
-
-C) Tech Score (0–100) – Nasdaq 5D %
-   >= +3.0% => 80
-   +1.0% to +2.9% => 65
-   -0.9% to +0.9% => 50
-   -1.0% to -2.9% => 35
-   <= -3.0% => 20
-
-D) VIX Score (0–100)
-   VIX <= 15  => 90
-   16–20      => 75
-   21–25      => 55
-   26–30      => 35
-   > 30       => 20
-
-E) Geo Score (0–100)
-   High risk (escalation, supply shock, sanctions) => 25–35
-   Medium risk => 45–55
-   Low risk => 60–70
-   Choose ONE value + 1 sentence justification.
-
-====================
-TOTAL SCORE
-====================
-
-Total =
-0.35 * MacroScore +
-0.25 * FedScore +
-0.15 * TechScore +
-0.15 * VIXScore +
-0.10 * GeoScore
-
-Round Total to a whole number.
+Total Score = (Macro*0.35) + (Fed*0.25) + (Tech*0.15) + (VIX*0.15) + (Geo*0.10)
 
 VERDICT:
-- BULLISH if Total >= 60
-- BEARISH if Total <= 40
-- otherwise NEUTRAL
+- Score >= 60: BULLISH
+- Score <= 40: BEARISH
+- Else: NEUTRAL
 
-====================
-OUTPUT (JSON ONLY)
-====================
-
+OUTPUT FORMAT:
+Return ONLY a valid JSON object. Do not use Markdown code blocks.
+Structure:
 {
-  "score": number,
+  "score": number (integer),
   "verdict": "BULLISH" | "BEARISH" | "NEUTRAL",
-  "report": "120–150 words in English. Must include: 10Y, inflation (CPI/PCE), VIX, Fed date, Nasdaq 5D%, geo takeaway, plus: Weekly Forecast (3–7 trading days). No additional fields."
+  "report": "100-140 words executive summary mentioning key inputs.",
+  "fed_rate": "string (e.g. '5.50%')",
+  "ecb_rate": "string (e.g. '3.25%')",
+  "us10y_val": "string (e.g. '4.35%')",
+  "vix_val": "string (e.g. '14.5')",
+  "btc_val": "string (e.g. '$95,400')",
+  "gold_val": "string (e.g. '$2,650')"
 }
             `;
 
@@ -626,25 +777,48 @@ OUTPUT (JSON ONLY)
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) throw new Error(response.status);
+            if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorBody}`);
+            }
 
             const data = await response.json();
 
             if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-                 throw new Error("Invalid API Response Structure");
+                 throw new Error("Empty response from AI model.");
             }
 
             const textResponse = data.candidates[0].content.parts[0].text;
-            const jsonString = textResponse.replace(/```json|```/g, '').trim();
-            const result = JSON.parse(jsonString);
+            const result = cleanAndParseJSON(textResponse);
 
             renderResults(result, currentModel);
 
         } catch (error) {
             console.warn(`Error with ${currentModel}: ${error.message}`);
-            retryText.textContent = `Model ${currentModel} unavailable (Code: ${error.message}). Trying fallback...`;
-            await new Promise(r => setTimeout(r, 1000));
+            retryText.textContent = `Model ${currentModel} failed. Switching to backup...`;
+            await new Promise(r => setTimeout(r, 1500)); // Short delay before retry
             await tryModel(index + 1, apiKey);
+        }
+    }
+
+    // Robust JSON Extractor
+    function cleanAndParseJSON(text) {
+        try {
+            // 1. Try direct parse
+            return JSON.parse(text);
+        } catch (e) {
+            // 2. Try stripping markdown blocks
+            let cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            try {
+                return JSON.parse(cleaned);
+            } catch (e2) {
+                // 3. Regex extraction of the object
+                const jsonMatch = text.match(/\{[\s\S]*\}/);
+                if (jsonMatch) {
+                    return JSON.parse(jsonMatch[0]);
+                }
+                throw new Error("Could not parse JSON response.");
+            }
         }
     }
 
@@ -654,31 +828,47 @@ OUTPUT (JSON ONLY)
         const verdictTxt = document.getElementById('verdictText');
         const reportTxt = document.getElementById('reportText');
         const usedModelTxt = document.getElementById('usedModelDisplay');
+        const fedRateTxt = document.getElementById('fed-rate-display');
+        const ecbRateTxt = document.getElementById('ecb-rate-display');
+        
+        // New Elements
+        const us10yTxt = document.getElementById('us10y-display');
+        const vixTxt = document.getElementById('vix-display');
+        const btcTxt = document.getElementById('btc-display');
+        const goldTxt = document.getElementById('gold-display');
 
+        // Populate Data
         scoreVal.textContent = data.score;
         verdictTxt.textContent = data.verdict;
         reportTxt.textContent = data.report;
-        usedModelTxt.textContent = `Data Source: Google Search via ${modelName}`;
+        fedRateTxt.textContent = data.fed_rate || "N/A";
+        ecbRateTxt.textContent = data.ecb_rate || "N/A";
+        
+        us10yTxt.textContent = data.us10y_val || "--";
+        vixTxt.textContent = data.vix_val || "--";
+        btcTxt.textContent = data.btc_val || "--";
+        goldTxt.textContent = data.gold_val || "--";
 
+        usedModelTxt.textContent = `Source: Google Search via ${modelName}`;
+
+        // Styling based on Verdict
         verdictTxt.className = 'verdict-value-premium';
-        scoreVal.style.borderColor = 'rgba(255,255,255,0.05)';
-        scoreVal.style.boxShadow = 'inset 0 0 20px rgba(192, 160, 98, 0.1)';
-        scoreVal.style.color = 'var(--accent-gold-light)';
+        // Reset score circle styling to default rainbow first
+        scoreVal.style.color = '#fff';
+        
+        // Remove old classes
+        verdictTxt.classList.remove('v-bullish', 'v-bearish', 'v-neutral');
 
-        if (String(data.verdict).toUpperCase().includes('BULL')) {
+        const vUpper = String(data.verdict).toUpperCase();
+        if (vUpper.includes('BULL')) {
             verdictTxt.classList.add('v-bullish');
-            scoreVal.style.borderColor = 'var(--success)';
-            scoreVal.style.boxShadow = '0 0 40px var(--success-glow), inset 0 0 20px rgba(16, 185, 129, 0.2)';
             scoreVal.style.color = 'var(--success)';
-        } else if (String(data.verdict).toUpperCase().includes('BEAR')) {
+            // Override gradient for specific states if desired, or keep rainbow
+        } else if (vUpper.includes('BEAR')) {
             verdictTxt.classList.add('v-bearish');
-            scoreVal.style.borderColor = 'var(--danger)';
-            scoreVal.style.boxShadow = '0 0 40px var(--danger-glow), inset 0 0 20px rgba(239, 68, 68, 0.2)';
             scoreVal.style.color = 'var(--danger)';
         } else {
             verdictTxt.classList.add('v-neutral');
-            scoreVal.style.borderColor = 'var(--neutral)';
-            scoreVal.style.boxShadow = '0 0 40px rgba(245, 158, 11, 0.4)';
             scoreVal.style.color = 'var(--neutral)';
         }
 
