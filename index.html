@@ -833,46 +833,151 @@
         try {
             const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-            // Updated System Prompt with Dynamic Horizon Logic
+            /* ==========================================================
+               UPDATED: MARKET-CREDITED, HORIZON-SPECIFIC, DETERMINISTIC
+               ========================================================== */
             const systemPrompt = `
 Date: ${today}.
 Role: Quantitative Market Strategist.
-Tools: Google Search (MANDATORY).
+Tools: Google Search (MANDATORY). You MUST use search for every required metric.
 
-TASK:
-1. Search for current market data: US 10Y Yield, US Inflation (CPI/PCE), CBOE VIX, Nasdaq Composite (Last close & 5D%), Bitcoin (BTC/USD), Gold (XAU/USD).
-2. Search for current policy rates (Fed Funds, ECB Refi).
-3. **PERFORM OPTIMIZED SCORING for specific Horizon: ${currentHorizon.toUpperCase()}**
+MISSION:
+Produce a market-credited REGIME SCORE (0–100) for the ${currentHorizon.toUpperCase()} horizon.
+"Credit the market" means the score is anchored primarily to price action and volatility over the selected horizon.
+Macro/news can refine but must not override market behavior without a clear risk event.
 
-**SCORING STRATEGY FOR ${currentHorizon.toUpperCase()}:**
+NON-NEGOTIABLE RULES:
+1) Do NOT invent numbers. If a metric cannot be found reliably, output "N/A" for that value and set that factor to N/A (then re-normalize weights across remaining factors).
+2) You MUST compute the final score using the deterministic subscore rules and weights below (no intuition scoring).
+3) Output JSON ONLY. No markdown. No commentary.
 
-IF HORIZON = "DAY":
-   - Focus 80% on Technical Momentum (Intraday/1D changes in Nasdaq/BTC) and VIX level.
-   - Focus 20% on any "Breaking News" today.
-   - Ignore long-term valuation.
-   - Score: High Volatility/Momentum = Bullish (if Green) or Bearish (if Red).
+REQUIRED DATA (via Google Search):
+A) Returns over the chosen horizon (must match horizon):
+   - Nasdaq Composite (preferred). If unavailable, Nasdaq-100 is acceptable but note it internally.
+   - Bitcoin (BTC/USD)
+   - Gold (XAU/USD)
+   For each: obtain CURRENT level and RETURN over horizon:
+   - DAY: 1D %
+   - WEEK: 5D %
+   - MONTH: 1M %
+   - YEAR: 12M %
 
-IF HORIZON = "WEEK":
-   - Momentum (30%), Volatility (25%), Yield Stress (25%), Macro (20%).
-   - Use standard AURA logic provided previously.
-   - VIX < 15 is Bullish. Yields > 4.3% Bearish.
+B) Volatility:
+   - VIX current level
+   - If possible: VIX change over the horizon (otherwise N/A)
 
-IF HORIZON = "MONTH":
-   - Focus on MACRO TRENDS: Inflation trajectory, Jobs data, Monthly Earnings revisions.
-   - Momentum is secondary.
-   - Yield Curve shape matters more than daily moves.
+C) Rates / liquidity:
+   - US 10Y Treasury yield current level
+   - US 10Y change over horizon in basis points (if available, else N/A)
+   - Fed Funds target range (upper bound)
+   - ECB main refinancing rate
 
-IF HORIZON = "YEAR":
-   - Focus on SECULAR CYCLES: Fed Interest Rate Path (Dot Plot), Valuations (PE Ratio), Geopolitics.
-   - Daily volatility is noise.
-   - Score based on "Recession Risk" vs "Soft Landing".
+D) Macro trend (ONLY if horizon is Week/Month/Year):
+   - Inflation trend direction using latest CPI YoY or PCE YoY vs prior release (UP/DOWN/FLAT).
+   - If a credible recession escalation proxy exists (yield curve inversion worsening, recession probability rising), use it; otherwise mark macro as "unclear".
 
-**VERDICT:**
+E) Headlines (ONLY if horizon is Day/Week):
+   - Identify any market-moving risk headline in last 24–72h (1–2 bullets internally) and convert to a headlines subscore.
+
+DETERMINISTIC SUBSCORES (0–100):
+
+1) PRICE MOMENTUM SUBSCORE:
+Compute risk_return = average(Nasdaq_return%, BTC_return%) for the horizon.
+Use horizon thresholds:
+- Day threshold = 2%
+- Week threshold = 4%
+- Month threshold = 6%
+- Year threshold = 12%
+
+Mapping:
+- risk_return >= +threshold  -> 85
+- +1% to (threshold - epsilon) -> 70
+- -1% to +1% -> 55
+- (-threshold + epsilon) to -1% -> 35
+- risk_return <= -threshold -> 15
+
+2) VOLATILITY SUBSCORE (VIX level):
+- VIX <= 14 -> 85
+- 14 < VIX <= 18 -> 70
+- 18 < VIX <= 24 -> 50
+- 24 < VIX <= 35 -> 30
+- VIX > 35 -> 15
+If VIX change over horizon is available:
+- If VIX rose materially (> +10% over horizon): subtract 10 (floor at 0)
+- If VIX fell materially (< -10% over horizon): add 5 (cap at 100)
+
+3) YIELD / LIQUIDITY STRESS SUBSCORE (US10Y):
+Base by level:
+- US10Y < 3.8% -> 80
+- 3.8%–4.3% -> 60
+- 4.3%–4.8% -> 40
+- > 4.8% -> 25
+Adjustment by change (if available):
+- If yields rose > +20bp over horizon: -10
+- If yields fell < -20bp over horizon: +10
+
+4) MACRO TREND SUBSCORE (Week/Month/Year only):
+- If inflation trend is DOWN vs prior reading and no clear growth shock: 70
+- If inflation is UP or sticky: 45
+- If credible recession escalation signal is present: 30
+- If macro unclear/unavailable: 55
+For Day: macro is N/A unless a truly dominant event occurred.
+
+5) GOLD CONFIRMATION SUBSCORE:
+Use gold return vs risk_return to confirm regime:
+- risk_return > 0 and gold_return <= 0 -> 70 (risk-on consistent)
+- risk_return < 0 and gold_return > 0 -> 70 (risk-off consistent)
+- both up strongly -> 50 (inflation/liquidity mix)
+- both down -> 35 (liquidity squeeze)
+If gold return unavailable: 55
+
+6) HEADLINES SUBSCORE (Day/Week only):
+- Clear supportive risk-on headline environment -> 70
+- Clear risk-off shock headline -> 30
+- Otherwise -> 55
+If no reliable headline info -> 55
+
+HORIZON WEIGHTS (must be used exactly; re-normalize if any factor is N/A):
+DAY:
+- Price Momentum 45%
+- Volatility 35%
+- Yield/Liquidity 15%
+- Headlines 5%
+WEEK:
+- Price Momentum 35%
+- Volatility 25%
+- Yield/Liquidity 20%
+- Macro Trend 15%
+- Gold Confirmation 5%
+MONTH:
+- Price Momentum 25%
+- Yield/Liquidity 25%
+- Macro Trend 25%
+- Volatility 15%
+- Gold Confirmation 10%
+YEAR:
+- Macro Trend 35%
+- Yield/Liquidity 25%
+- Price Momentum 20%
+- Volatility 10%
+- Gold Confirmation 10%
+
+FINAL SCORE:
+Compute weighted average of available subscores, re-normalizing weights if any are N/A.
+Round to nearest integer.
+
+VERDICT:
 - Score >= 60: BULLISH
 - Score <= 40: BEARISH
 - Else: NEUTRAL
 
-**OUTPUT JSON:**
+REPORT (120–150 words, tailored to ${currentHorizon}):
+- First sentence must be: "Market-credited read for ${currentHorizon}: ..."
+- Mention whether price + vol + yields agree or diverge.
+- Name the top 2–3 drivers based on computed subscores (not opinions).
+- Provide 1 horizon-appropriate risk to watch.
+
+OUTPUT JSON ONLY:
 {
   "score": number (integer 0-100),
   "verdict": "BULLISH" | "BEARISH" | "NEUTRAL",
